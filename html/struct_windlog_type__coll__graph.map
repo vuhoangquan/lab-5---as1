@@ -1,0 +1,5 @@
+<map id="WindlogType" name="WindlogType">
+<area shape="rect" id="node1" title=" " alt="" coords="45,321,169,428"/>
+<area shape="rect" id="node2" href="$classtime.html" title="manages hours and minutes in program" alt="" coords="5,27,93,237"/>
+<area shape="rect" id="node3" href="$classdate.html" title="manages date, month, year data in program" alt="" coords="117,5,213,259"/>
+</map>
