@@ -116,7 +116,6 @@ float Kmh_to_Ms(float speed_kmh) {
 void Print_partData(Vector<WindlogType>& windlog) {
 	for (int i = 0; i < 30; i++) {
 		cout << "print_check:" << windlog.at(i).speed << ":" << windlog.at(i).solar_radiation << ":" << windlog.at(i).air_temperature << endl;
-
 	}
 }
 //-------------------------------------------------------------------------
@@ -147,9 +146,9 @@ void Process_data(Vector<WindlogType>& windlog, int month_input, int year_input,
 			else if (month_count < windlog.at(i).d.getMonth()) {
 				if (sum_speed != 0 || sum_solar_radatiation != 0 || sum_air_temp != 0) {//output
 					cout << month_to_int(month_count) << " " << year_input << ":";
-					if (s == 1) { printf(" %.1f km/h, ", (sum_speed / involved_row)); }
-					if (sr == 1) { printf(" %.4f kWh/m2, ", Wh_to_kWh(sum_solar_radatiation / involved_row)); }
-					if (t == 1) { printf(" %.2f degrees C ", (sum_air_temp / involved_row)); }
+					if (s == 1) { printf("1 %.1f km/h, ", (sum_speed / involved_row)); }
+					if (sr == 1) { printf("1 %.4f kWh/m2, ", Wh_to_kWh(sum_solar_radatiation / involved_row)); }
+					if (t == 1) { printf("1 %.2f degrees C ", (sum_air_temp / involved_row)); }
 					cout << endl;
 					if (file_output == true) {
 						//print to file
@@ -159,7 +158,7 @@ void Process_data(Vector<WindlogType>& windlog, int month_input, int year_input,
 				}
 				else {//no data calculating
 					if (month_input == 0) {//run when only year is entered
-						cout << month_to_int(month_count) << " " << year_input << ": No Data" << endl;
+						cout << month_to_int(month_count) << " " << year_input << ":1 No Data" << endl;
 						if (file_output == true) {
 							//print no data to file
 						}
@@ -170,7 +169,7 @@ void Process_data(Vector<WindlogType>& windlog, int month_input, int year_input,
 		}
 	}
 	//after search endded
-	if (found == false) {//year no found - print year not found
+	if (found == false) {//year not found - print "(month) year no data"
 		if (month_input != 0) { cout << month_to_int(month_count) << " " << year_input << ": No Data" << endl; }
 		else { cout << "Year: " << year_input << ": No Data" << endl; }
 	}
@@ -187,10 +186,23 @@ void Process_data(Vector<WindlogType>& windlog, int month_input, int year_input,
 					//print to file
 					output_file << month_to_int(month_count) << "," << (sum_speed / involved_row) << "," << Wh_to_kWh(sum_solar_radatiation / involved_row) << "," << (sum_air_temp / involved_row) << "\n";
 				}
+				sum_speed = 0; involved_row = 0, sum_solar_radatiation = 0, sum_air_temp = 0;//reset value
 			}
 			else {//program that reach here when eof 
 				while (month_count <= 12) {
-					cout << month_to_int(month_count) << " " << year_input << ": No Data" << endl;
+					//year has not changed and month has not increased
+					if (sum_speed != 0 || involved_row != 0 || sum_solar_radatiation != 0 || sum_air_temp != 0) {// some calc has not output
+						cout << month_to_int(month_count) << " " << year_input << ":";
+						if (s == 1) { printf(" %.1f km/h, ", (sum_speed / involved_row)); }
+						if (sr == 1) { printf(" %.4f kWh/m2, ", Wh_to_kWh(sum_solar_radatiation / involved_row)); }
+						if (t == 1) { printf(" %.2f degrees C ", (sum_air_temp / involved_row)); }
+						cout << endl;
+						sum_speed = 0; involved_row = 0, sum_solar_radatiation = 0, sum_air_temp = 0;//reset value
+					}
+					else {
+						cout << month_to_int(month_count) << " " << year_input << ":2 No Data" << endl;
+
+					}
 					month_count++;
 				}
 			}
