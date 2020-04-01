@@ -142,11 +142,13 @@
     <ClCompile Include="date.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="time.cpp" />
+    <ClCompile Include="unit.cpp" />
     <ClCompile Include="unit_testing_file.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="date.h" />
     <ClInclude Include="time.h" />
+    <ClInclude Include="unit.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>

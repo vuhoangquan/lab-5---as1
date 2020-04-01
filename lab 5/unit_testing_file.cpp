@@ -1,9 +1,9 @@
-#pragma once
 #include <iostream>
 #include <fstream>
 #include "date.h"
 #include "time.h"
 #include"Vector.h"
+#include "unit.h"
 
 using namespace std;
 
@@ -58,76 +58,76 @@ using namespace std;
 //	Process_data(windlog, 0, 1, 1, 1, 1, true);//use windlog data, take no month input ,take year input, has speed, has solar radiation, has tempertature, has file output
 //}
 
-int Unit_test() {
-	//set value into objects
-	//passed
+//int Unit_test() {
+//	//set value into objects
+//	//passed
+//
+//	time timeobj;
+//	date dateobj;
+//
+//	cout << "test the cimpliler of buggy vccomm " << endl << endl;
+//	timeobj.setHour(12); timeobj.setMin(04); timeobj.getHour();
+//	dateobj.setDay(42); dateobj.setMonth(23); dateobj.setYear(3285);
+//	cout << "show timeobj value: " << timeobj.getHour(); cout << " " << timeobj.getMin();
+//	cout << "\nshow dateobj value: " << dateobj.getDay(); cout << " " << dateobj.getMonth(); cout << " " << dateobj.getYear();
+//	cout << endl;
+//	timeobj.print();
+//	cout << endl;
+//	dateobj.print();
+//	cout << "\nend..." << endl;
+//	return 0;
+//}
 
-	time timeobj;
-	date dateobj;
+//int Unit_test2() {
+//	//this is very useful snippet to avoid GIGO
+//	//passed
+//	string filename;
+//	ifstream input; ofstream output_file;
+//	//system("dir");
+//	//test small file
+//	input.open("data/MetData_Mar01-2014-Mar01-2015-ALL.csv");// data/MetData_Mar01-2014-Mar01-2015-ALL.csv for full test. MetData-31-3.csv
+//	input.ignore(500, '\n'); //skip 1st line, till end of line
+//	//cout << input.peek();
+//	while (!input.eof()) {
+//		string temp;
+//		getline(input, temp, '\n');
+//		cout << temp << endl;// output till end of line
+//	}
+//	return 0;
+//	//just ~ cat data/MetData-31-3.csv (-.-)
+//}
 
-	cout << "test the cimpliler of buggy vccomm " << endl << endl;
-	timeobj.setHour(12); timeobj.setMin(04); timeobj.getHour();
-	dateobj.setDay(42); dateobj.setMonth(23); dateobj.setYear(3285);
-	cout << "show timeobj value: " << timeobj.getHour(); cout << " " << timeobj.getMin();
-	cout << "\nshow dateobj value: " << dateobj.getDay(); cout << " " << dateobj.getMonth(); cout << " " << dateobj.getYear();
-	cout << endl;
-	timeobj.print();
-	cout << endl;
-	dateobj.print();
-	cout << "\nend..." << endl;
-	return 0;
-}
-
-int Unit_test2() {
-	//this is very useful snippet to avoid GIGO
-	//passed
-	string filename;
-	ifstream input; ofstream output_file;
-	//system("dir");
-	//test small file
-	input.open("data/MetData_Mar01-2014-Mar01-2015-ALL.csv");// data/MetData_Mar01-2014-Mar01-2015-ALL.csv for full test. MetData-31-3.csv
-	input.ignore(500, '\n'); //skip 1st line, till end of line
-	//cout << input.peek();
-	while (!input.eof()) {
-		string temp;
-		getline(input, temp, '\n');
-		cout << temp << endl;// output till end of line
-	}
-	return 0;
-	//just ~ cat data/MetData-31-3.csv (-.-)
-}
-
-int Unit_test3() {
-	//this test vector function
-	//passed
-	Vector<int> intArray;
-	intArray.push_back(1758);
-	cout << intArray.getMaxLen() << endl;//expected 3 - default value
-	intArray.push_back(12);
-	cout << intArray.getMaxLen() << endl;//expected 6 - double max length
-	cout << " " << intArray.Size() << endl;//expect 2
-	intArray.push_back(98);
-	intArray.push_back(1758);
-	cout << intArray.getMaxLen() << endl;//expected 12 - double max length
-	intArray.push_back(15);
-	cout << " " << intArray.Size() << endl;//expect 5
-	intArray.push_back(98);
-	cout << intArray.at(4) << endl;//expect 15 or 1758
-
-	Vector<date> dateArr;
-	date dateTemp;
-	dateTemp.setDate(12, 7, 5673);
-	dateArr.push_back(dateTemp);
-	cout << dateArr.getMaxLen() << endl;//expected 3 - default value
-	dateTemp.setDate(01, 12, 1925);
-	dateArr.push_back(dateTemp);
-	cout << dateArr.getMaxLen() << endl;//expected 6 - doubled
-	dateTemp.setDate(27, 1, 1999);
-	dateArr.push_back(dateTemp);
-	cout << " " << dateArr.Size() << endl;//expect 3
-	dateArr.at(1).print();//expect day: 1 month: 12 year: 1925 
-	return 0;
-}
+//int Unit_test3() {
+//	//this test vector function
+//	//passed
+//	Vector<int> intArray;
+//	intArray.push_back(1758);
+//	cout << intArray.getMaxLen() << endl;//expected 3 - default value
+//	intArray.push_back(12);
+//	cout << intArray.getMaxLen() << endl;//expected 6 - double max length
+//	cout << " " << intArray.Size() << endl;//expect 2
+//	intArray.push_back(98);
+//	intArray.push_back(1758);
+//	cout << intArray.getMaxLen() << endl;//expected 12 - double max length
+//	intArray.push_back(15);
+//	cout << " " << intArray.Size() << endl;//expect 5
+//	intArray.push_back(98);
+//	cout << intArray.at(4) << endl;//expect 15 or 1758
+//
+//	Vector<date> dateArr;
+//	date dateTemp;
+//	dateTemp.setDate(12, 7, 5673);
+//	dateArr.push_back(dateTemp);
+//	cout << dateArr.getMaxLen() << endl;//expected 3 - default value
+//	dateTemp.setDate(01, 12, 1925);
+//	dateArr.push_back(dateTemp);
+//	cout << dateArr.getMaxLen() << endl;//expected 6 - doubled
+//	dateTemp.setDate(27, 1, 1999);
+//	dateArr.push_back(dateTemp);
+//	cout << " " << dateArr.Size() << endl;//expect 3
+//	dateArr.at(1).print();//expect day: 1 month: 12 year: 1925 
+//	return 0;
+//}
 //
 //int Unit_test4() {
 //	//passed
@@ -157,21 +157,35 @@ int Unit_test3() {
 //	// Vector <<- struct <<- date, timeObj, speed <<- primitive_input
 //}
 
-int Unit_test5() {
-	//process, split raw string 
-	//passed
-	string raw_data = "12/23/5754 16:23, 35,7,34,9.2,45,1,,\n13/3/1256 4:2,";
-	string un_process_string = "12/23/5754 16:23, 35,7,34,9.2,45,1,,";
-	cout << un_process_string.find("3") << endl;//get 1st orcurrence of " " -expect 4
-	cout << un_process_string.substr(0, un_process_string.find("/")) << endl;//expect 12
-	un_process_string = un_process_string.substr(un_process_string.find("/"), un_process_string.size());//this remove the readed part
-	cout << un_process_string.substr(0, un_process_string.find(",")) << endl;//expect /23/7554 16:23
-	un_process_string = un_process_string.substr(un_process_string.find(","), un_process_string.size());
-
-
-	//singleLine.substr(0, singleLine.find(",");
-	cout << un_process_string;
-	return 0;
-}
+//int Unit_test5() {
+//	//process, split raw string 
+//	//passed
+//	string raw_data = "12/23/5754 16:23, 35,7,34,9.2,45,1,,\n13/3/1256 4:2,";
+//	string un_process_string = "12/23/5754 16:23, 35,7,34,9.2,45,1,,";
+//	cout << un_process_string.find("3") << endl;//get 1st orcurrence of " " -expect 4
+//	cout << un_process_string.substr(0, un_process_string.find("/")) << endl;//expect 12
+//	un_process_string = un_process_string.substr(un_process_string.find("/"), un_process_string.size());//this remove the readed part
+//	cout << un_process_string.substr(0, un_process_string.find(",")) << endl;//expect /23/7554 16:23
+//	un_process_string = un_process_string.substr(un_process_string.find(","), un_process_string.size());
+//
+//
+//	//singleLine.substr(0, singleLine.find(",");
+//	cout << un_process_string;
+//	return 0;
+//}
 //previous unit testing fucntion will not work since it was originally placed in main -> moved here to clear main.cpp clutter
 //any fucntion after this should work since this will be for assignment 2 unit test
+
+int unit_testing_Unit_class() {
+	unit unit_Obj_1;
+	unit_Obj_1.print();
+
+	unit *unitptr = new unit();       
+	unitptr->setUnit(354, 4456, 35);
+	unitptr->print();
+
+	unitptr->setSpeed(45.36);
+	cout<<unitptr->getSpeed();
+
+	return 0;
+}

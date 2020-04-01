@@ -8,11 +8,10 @@
 #include "time.h"
 #include "date.h"
 #include "Vector.h"//capital V to distinguish from STL vector
-//#include "unit_testing_file.cpp"
 //-------------------------------------------------------------------------
 typedef struct {
-	date d;
-	time t;
+	date *d;
+	time *t;
 	float speed = 0;
 	float solar_radiation = 0;
 	float air_temperature = 0;//ambient air temperature
@@ -30,11 +29,13 @@ void menuOption1(Vector<WindlogType>& windlog);
 void Menu(Vector<WindlogType>& windlog);
 void ReadFile(Vector<WindlogType>& windlog);
 void SplitString(string singleLine, WindlogType& StructWind);
+static Vector<string> read_met_index();
 //int Unit_test();
 //int Unit_test2();
 //int Unit_test3();
 //int Unit_test4();
 //int Unit_test5();
+//int unit_testing_Unit_class();
 //-------------------------------------------------------------------------
 
 
@@ -44,8 +45,11 @@ void SplitString(string singleLine, WindlogType& StructWind);
 //                     2 WindTempSolar.csv
 
 int main() {
-
+	//unit_testing_Unit_class();
+	//system("pause");
+	//return 0;
 	Vector<WindlogType> windlog;
+	
 	ReadFile(windlog);
 	Menu(windlog);
 
@@ -57,6 +61,34 @@ int main() {
 	//Unit_test4();//this read file to windlog 
 	//Unit_test5();//this test split string input
 
+}
+//-------------------------------------------------------------------------
+
+static void read_met_index(Vector<string>& FileVector) {
+	ifstream input;
+	int j = 0;
+	string FileArray[10] = { "","","","","","","","","","" };
+	string* FileArrayPtr = new string[10];
+	FileArrayPtr = FileArray;
+
+	input.open("data/met_index.txt");
+	while (!input.eof()) {
+
+		getline(input, FileArray[j], '\n');//read filename from a met index
+		FileArray[j] = "data/" + FileArray[j];//add data / to filename
+		FileVector.push_back(*FileArrayPtr);//add into array to return
+		FileArrayPtr++;//move pointer to next location
+		j++;
+	}
+	input.ignore(100);
+
+	if (input.is_open()) { input.close(); }
+	//++++++++++++++++++++++++++++++++++++++++++++++++++++
+	cout << "files name in met_index.txt:" << endl;
+	for (int counting = 0; counting < FileVector.Size(); counting++) {
+		//cout << FileArray[counting] << endl;
+		cout << FileVector.at(counting) << endl;
+	}
 }
 //-------------------------------------------------------------------------
 string month_to_int(int monthParam)
@@ -115,7 +147,7 @@ float Kmh_to_Ms(float speed_kmh) {
 //-------------------------------------------------------------------------
 void Print_partData(Vector<WindlogType>& windlog) {
 	for (int i = 0; i < 30; i++) {
-		cout << "print_check:" << windlog.at(i).speed << ":" << windlog.at(i).solar_radiation << ":" << windlog.at(i).air_temperature << endl;
+		cout << "print_check 30 nodes for vector:" << windlog.at(i).speed << ":" << windlog.at(i).solar_radiation << ":" << windlog.at(i).air_temperature << endl;
 	}
 }
 //-------------------------------------------------------------------------
@@ -134,17 +166,17 @@ void Process_data(Vector<WindlogType>& windlog, int month_input, int year_input,
 
 	for (int i = 0; i < windlog.Size(); i++)//search whole dataset
 	{
-		if (windlog.at(i).d.getYear() == year_input)//found year
+		if (windlog.at(i).d->getYear() == year_input)//found year
 		{
 			found = true;
-			if (month_count == windlog.at(i).d.getMonth()) {//calc month data
+			if (month_count == windlog.at(i).d->getMonth()) {//calc month data
 				if (s == 1) { sum_speed = sum_speed + windlog.at(i).speed; }
 				if (sr == 1 && windlog.at(i).solar_radiation > 100) { sum_solar_radatiation = sum_solar_radatiation + windlog.at(i).solar_radiation; }
 				if (t == 1) { sum_air_temp = sum_air_temp + windlog.at(i).air_temperature; }
 				involved_row++;
 			}
-			else if (month_count < windlog.at(i).d.getMonth()) {
-				if (sum_speed != 0 || sum_solar_radatiation != 0 || sum_air_temp != 0) {//output
+			else if (month_count < windlog.at(i).d->getMonth()) {
+				if (sum_speed != 0 || sum_solar_radatiation != 0 || sum_air_temp != 0) {//output if some data is calculated
 					cout << month_to_int(month_count) << " " << year_input << ":";
 					if (s == 1) { printf("1 %.1f km/h, ", (sum_speed / involved_row)); }
 					if (sr == 1) { printf("1 %.4f kWh/m2, ", Wh_to_kWh(sum_solar_radatiation / involved_row)); }
@@ -156,7 +188,7 @@ void Process_data(Vector<WindlogType>& windlog, int month_input, int year_input,
 					}
 					sum_speed = 0; involved_row = 0, sum_solar_radatiation = 0, sum_air_temp = 0;//reset value
 				}
-				else {//no data calculating
+				else {//no data calculating 
 					if (month_input == 0) {//run when only year is entered
 						cout << month_to_int(month_count) << " " << year_input << ":1 No Data" << endl;
 						if (file_output == true) {
@@ -170,13 +202,13 @@ void Process_data(Vector<WindlogType>& windlog, int month_input, int year_input,
 	}
 	//after search endded
 	if (found == false) {//year not found - print "(month) year no data"
-		if (month_input != 0) { cout << month_to_int(month_count) << " " << year_input << ": No Data" << endl; }
-		else { cout << "Year: " << year_input << ": No Data" << endl; }
+		if (month_input != 0) { cout << month_to_int(month_count) << " " << year_input << ":02 No Data" << endl; }
+		else { cout << "Year: " << year_input << ":03 No Data" << endl; }
 	}
 	else {//if year found and output previous month done
 		if (month_input == 0) {//if option require output for every month of a year --> apply for option 2,3,4
-			if (year_input != windlog.at(windlog.Size() - 1).d.getYear()) {//the last row in data is not the searched year - then year has changed
-			//print last month average
+			if (sum_speed != 0 || involved_row != 0 || sum_solar_radatiation != 0 || sum_air_temp != 0) {// some calc has not output
+				//print last month average
 				cout << month_to_int(month_count) << " " << year_input << ":";
 				if (s == 1) { printf(" %.1f km/h, ", (sum_speed / involved_row)); }
 				if (sr == 1) { printf(" %.4f kWh/m2, ", Wh_to_kWh(sum_solar_radatiation / involved_row)); }
@@ -187,29 +219,17 @@ void Process_data(Vector<WindlogType>& windlog, int month_input, int year_input,
 					output_file << month_to_int(month_count) << "," << (sum_speed / involved_row) << "," << Wh_to_kWh(sum_solar_radatiation / involved_row) << "," << (sum_air_temp / involved_row) << "\n";
 				}
 				sum_speed = 0; involved_row = 0, sum_solar_radatiation = 0, sum_air_temp = 0;//reset value
+				month_count++;
 			}
-			else {//program that reach here when eof 
-				while (month_count <= 12) {
-					//year has not changed and month has not increased
-					if (sum_speed != 0 || involved_row != 0 || sum_solar_radatiation != 0 || sum_air_temp != 0) {// some calc has not output
-						cout << month_to_int(month_count) << " " << year_input << ":";
-						if (s == 1) { printf(" %.1f km/h, ", (sum_speed / involved_row)); }
-						if (sr == 1) { printf(" %.4f kWh/m2, ", Wh_to_kWh(sum_solar_radatiation / involved_row)); }
-						if (t == 1) { printf(" %.2f degrees C ", (sum_air_temp / involved_row)); }
-						cout << endl;
-						sum_speed = 0; involved_row = 0, sum_solar_radatiation = 0, sum_air_temp = 0;//reset value
-					}
-					else {
-						cout << month_to_int(month_count) << " " << year_input << ":2 No Data" << endl;
-
-					}
-					month_count++;
-				}
+			while (month_count <= 12) {//repeat print " no data" for all month that dont have data 
+				cout << month_to_int(month_count) << " " << year_input << ":2 No Data" << endl;
+				month_count++;
 			}
 		}
 	}
 }
 //-------------------------------------------------------------------------
+///this is very different to other option so process_data function will not handle option 1
 void menuOption1(Vector<WindlogType>& windlog) {
 	bool found = false;
 	int month_input, year_input;
@@ -218,7 +238,7 @@ void menuOption1(Vector<WindlogType>& windlog) {
 	float involved_row = 0, sum_speed = 0, sum_air_temp = 0;/*for ave calculation*/
 	for (int i = 0; i < windlog.Size(); i++)//search whole dataset
 	{
-		if ((windlog.at(i).d.getMonth()) == month_input && (windlog.at(i).d.getYear()) == year_input)//found month, year
+		if ((windlog.at(i).d->getMonth()) == month_input && (windlog.at(i).d->getYear()) == year_input)//found month, year
 		{
 			sum_speed = sum_speed + windlog.at(i).speed;
 			sum_air_temp = sum_air_temp + windlog.at(i).air_temperature;
@@ -262,7 +282,7 @@ void Menu(Vector<WindlogType>& windlog) {
 			//menuOption4(windlog);
 		}
 		else if (input == "5") {
-			cout << "program exit...";
+			cout << "program exit.......  ";
 			repeat = false;
 		}
 		else {
@@ -275,79 +295,89 @@ void ReadFile(Vector<WindlogType>& windlog) {
 	//read file 
 	ifstream input; ofstream output_file;
 	//system("dir");
-	input.open("data/MetData_Mar01-2015-Mar01-2016-ALL.csv");// data/MetData-31-3.csv --sample     MetData_Mar01-2014-Mar01-2015-ALL.csv
-	input.ignore(500, '\n'); //skip 1st line, till end of line
+	Vector<string> file_list;
+	read_met_index(file_list);
+	for (int fileloop = 0; fileloop < file_list.Size(); fileloop++) {
+		input.open(file_list.at(fileloop));
+		//data/MetData-31-3.csv -- sample
+		//data/MetData-31-3a.csv
+		//data/MetData_Mar01-2014-Mar01-2015-ALL.csv
+		//data/MetData_Mar01-2015-Mar01-2016-ALL.csv
+		//
+		input.ignore(500, '\n'); //skip 1st line, till end of line
 
-	while (!input.eof()) {
-		string singleLine;
-		WindlogType StructWind;
-		getline(input, singleLine, '\n');
-		//cout <<":"<< singleLine << endl;// output till end of line
+		while (!input.eof()) {
+			string singleLine;
+			WindlogType StructWind;
+			getline(input, singleLine, '\n');
+			//cout <<":"<< singleLine << endl;// output till end of line
 
-		//value checking for what is in the input_file (GIGO)
-		if (singleLine == " " || singleLine == "") {
-			//cout << "there is an empty line in file" << endl;
-			break;
+			//value checking for what is in the input_file (GIGO)
+			if (singleLine == " " || singleLine == "") {
+				//cout << "there is an empty line in file" << endl;
+				break;
+			}
+			SplitString(singleLine, StructWind);
+
+			//// **/**/**** **:**,DP,Dta,Dts,EV,QFE,QFF,QNH,RF,RH,S,SR,ST1,ST2,ST3,ST4,Sx,T
+			////				  0 ,1  ,2  ,3 ,4  ,5  ,6  ,7 ,8 ,9,10,11 ,12 ,13 ,14 ,15,16,\n
+			for (int i = 0; i <= 17; i++) {
+				if (i == 10) {
+					StructWind.speed = stof(singleLine.substr(0, singleLine.find(",")));//read till delimiter in singleLine as float
+				}
+				else if (i == 11) {
+					StructWind.solar_radiation = stof(singleLine.substr(0, singleLine.find(",")));//read till delimiter in singleLine as float
+				}
+				else if (i == 17) {
+					StructWind.air_temperature = stof(singleLine.substr(0, singleLine.find(",")));//read till delimiter in singleLine as float
+				}
+				singleLine = singleLine.substr(singleLine.find(",") + 1, singleLine.size());
+			}
+
+			//add into windlog Vector
+			windlog.push_back(StructWind);
+
+			//test check
+			//cout << " ssay " << sDay;
+			//cout << "    smoth " << sMonth;
+			//cout << "    syear " << sYear;
+			//cout << "    shh " << sHH;
+			//cout << "    smm " << sMM << endl;
+
+			//cout << " ssay " << t_day;
+			//cout << "    smoth " << t_month;
+			//cout << "    syear " << t_year;
+			//cout << "    shh " << t_hour;
+			//cout << "    smm " << t_min << endl;
+			//cout << "singleline:     " << singleLine << endl;//this should be all the sensor no
+
+			//cout << "   Struct date: "; StructWind.d.print();
+			//cout << "   Struct time: "; StructWind.t.print();
+			//cout << "   Struct speed:" << StructWind.speed << endl;
+
+
+			//windlog.at(0).d.print();
+			//cout<<" "<<windlog.at(0).speed<<" ";
+			//cout<<windlog.Size()<<" ";
+			//cout<<windlog.getMaxLen()<<" ";
 		}
-		SplitString(singleLine, StructWind);
-
-		//// **/**/**** **:**,DP,Dta,Dts,EV,QFE,QFF,QNH,RF,RH,S,SR,ST1,ST2,ST3,ST4,Sx,T
-		////				  0 ,1  ,2  ,3 ,4  ,5  ,6  ,7 ,8 ,9,10,11 ,12 ,13 ,14 ,15,16,\n
-		for (int i = 0; i <= 17; i++) {
-			if (i == 10) {
-				StructWind.speed = stof(singleLine.substr(0, singleLine.find(",")));//read till delimiter in singleLine as float
-			}
-			else if (i == 11) {
-				StructWind.solar_radiation = stof(singleLine.substr(0, singleLine.find(",")));//read till delimiter in singleLine as float
-			}
-			else if (i == 17) {
-				StructWind.air_temperature = stof(singleLine.substr(0, singleLine.find(",")));//read till delimiter in singleLine as float
-			}
-			singleLine = singleLine.substr(singleLine.find(",") + 1, singleLine.size());
-		}
-
-		//add into windlog Vector
-		windlog.push_back(StructWind);
-
+		input.close();
 		//test check
-		//cout << " ssay " << sDay;
-		//cout << "    smoth " << sMonth;
-		//cout << "    syear " << sYear;
-		//cout << "    shh " << sHH;
-		//cout << "    smm " << sMM << endl;
+		/*cout<<"size "<<windlog.Size()<<" ";
+		windlog.at(windlog.Size() - 1).t.print(); cout<< " ";
+		windlog.pop();
+		cout << "size " << windlog.Size() << " ";
+		windlog.at(windlog.Size() - 1).t.print();*/
 
-		//cout << " ssay " << t_day;
-		//cout << "    smoth " << t_month;
-		//cout << "    syear " << t_year;
-		//cout << "    shh " << t_hour;
-		//cout << "    smm " << t_min << endl;
-		//cout << "singleline:     " << singleLine << endl;//this should be all the sensor no
+		// Vector <<- struct <<- date, timeObj, speed <<- primitive_input
 
-		//cout << "   Struct date: "; StructWind.d.print();
-		//cout << "   Struct time: "; StructWind.t.print();
-		//cout << "   Struct speed:" << StructWind.speed << endl;
-
-
-		//windlog.at(0).d.print();
-		//cout<<" "<<windlog.at(0).speed<<" ";
-		//cout<<windlog.Size()<<" ";
-		//cout<<windlog.getMaxLen()<<" ";
 	}
-	input.close();
-	//test check
-	/*cout<<"size "<<windlog.Size()<<" ";
-	windlog.at(windlog.Size() - 1).t.print(); cout<< " ";
-	windlog.pop();
-	cout << "size " << windlog.Size() << " ";
-	windlog.at(windlog.Size() - 1).t.print();*/
-
-	// Vector <<- struct <<- date, timeObj, speed <<- primitive_input
-
+	
 }
 //-------------------------------------------------------------------------
 void SplitString(string singleLine, WindlogType& StructWind) {
-	///process file string, convert into compatible type (stoi), added to struct
-	string sDay, sMonth, sYear, sHH, sMM;//string of date,mth,year,hour,min
+	///process file string, convert into compatible type (stoi), create date time class, added to struct
+	string sDay="", sMonth="", sYear="", sHH="", sMM="";//string of date,mth,year,hour,min
 	//read 1 singleline into date, month, year, hour, min as string
 	sDay = singleLine.substr(0, singleLine.find("/"));//this read into date string
 	singleLine = singleLine.substr(singleLine.find("/") + 1, singleLine.size());//this remove the read part, AND the delimiter Symbol
@@ -369,8 +399,12 @@ void SplitString(string singleLine, WindlogType& StructWind) {
 	t_hour = stoi(sHH);
 	t_min = stoi(sMM);
 	//read sensor data
-	StructWind.d.setDate(t_day, t_month, t_year);
-	StructWind.t.setTime(t_hour, t_min);
+	date *datePtr = new date(t_day, t_month, t_year);
+	time* timePtr = new time(t_hour, t_min);
+
+	StructWind.d = datePtr;
+	StructWind.t = timePtr;
+
 }
 
 

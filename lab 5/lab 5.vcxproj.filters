@@ -27,15 +27,21 @@
     <ClCompile Include="unit_testing_file.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="unit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Vector.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="date.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="time.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="unit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
