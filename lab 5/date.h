@@ -18,9 +18,12 @@ class date {
 	 * @brief  overload input and output to show, store all date info
 	 *
 	 */
-	//friend ostream& operator << (ostream&, const date&);//declaration (of vector?)
-	//friend istream& operator >> (istream&, date&);
+	friend ostream& operator << (ostream&, const date&);
+	friend istream& operator >> (istream&, date&);
 public:
+	bool operator < (date& rhs)const;
+	bool operator == (date& rhs)const;
+	date& operator = (const int rhs);
 	date();
 	/**
 	 * @brief  set date month year

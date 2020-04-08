@@ -29,7 +29,10 @@ void menuOption1(Vector<WindlogType>& windlog);
 void Menu(Vector<WindlogType>& windlog);
 void ReadFile(Vector<WindlogType>& windlog);
 void SplitString(string singleLine, WindlogType& StructWind);
-static Vector<string> read_met_index();
+static void DisplayMenu();
+static void read_met_index(Vector<string>& FileVector);
+bool search_string(string singleline, string searchWord);
+
 //int Unit_test();
 //int Unit_test2();
 //int Unit_test3();
@@ -51,6 +54,7 @@ int main() {
 	Vector<WindlogType> windlog;
 	
 	ReadFile(windlog);
+	DisplayMenu();
 	Menu(windlog);
 
 	system("pause");
@@ -63,7 +67,10 @@ int main() {
 
 }
 //-------------------------------------------------------------------------
-
+static void DisplayMenu() {
+	cout << "---------------\nMENU: \n 1. show data from a month of a year \n 2. show data from a year \n 3. show data from a year \n 4. export data from a year to WindTempSolar.csv file \n 5. exit program \n---------------\n";
+};
+//-------------------------------------------------------------------------
 static void read_met_index(Vector<string>& FileVector) {
 	ifstream input;
 	int j = 0;
@@ -150,6 +157,18 @@ void Print_partData(Vector<WindlogType>& windlog) {
 		cout << "print_check 30 nodes for vector:" << windlog.at(i).speed << ":" << windlog.at(i).solar_radiation << ":" << windlog.at(i).air_temperature << endl;
 	}
 }
+bool search_string(string singleline, string searchWord) {
+	size_t found = singleline.find(searchWord);
+	if (found != std::string::npos)
+	{
+		//std::cout << "first " + searchWord + " is found at: " << found << '\n';
+		return true;
+	}
+	else {
+		//cout << "searched " + searchWord + " not found" << endl;
+		return false;
+	}
+}
 //-------------------------------------------------------------------------
 void Process_data(Vector<WindlogType>& windlog, int month_input, int year_input, int s, int sr, int t, bool file_output) {
 	bool found = false;//indicate if search has any matching row
@@ -178,9 +197,9 @@ void Process_data(Vector<WindlogType>& windlog, int month_input, int year_input,
 			else if (month_count < windlog.at(i).d->getMonth()) {
 				if (sum_speed != 0 || sum_solar_radatiation != 0 || sum_air_temp != 0) {//output if some data is calculated
 					cout << month_to_int(month_count) << " " << year_input << ":";
-					if (s == 1) { printf("1 %.1f km/h, ", (sum_speed / involved_row)); }
-					if (sr == 1) { printf("1 %.4f kWh/m2, ", Wh_to_kWh(sum_solar_radatiation / involved_row)); }
-					if (t == 1) { printf("1 %.2f degrees C ", (sum_air_temp / involved_row)); }
+					if (s == 1) { printf(" %.1f km/h, ", (sum_speed / involved_row)); }
+					if (sr == 1) { printf(" %.4f kWh/m2, ", Wh_to_kWh(sum_solar_radatiation / involved_row)); }
+					if (t == 1) { printf(" %.2f degrees C ", (sum_air_temp / involved_row)); }
 					cout << endl;
 					if (file_output == true) {
 						//print to file
@@ -190,7 +209,7 @@ void Process_data(Vector<WindlogType>& windlog, int month_input, int year_input,
 				}
 				else {//no data calculating 
 					if (month_input == 0) {//run when only year is entered
-						cout << month_to_int(month_count) << " " << year_input << ":1 No Data" << endl;
+						cout << month_to_int(month_count) << " " << year_input << ": No Data" << endl;
 						if (file_output == true) {
 							//print no data to file
 						}
@@ -202,8 +221,8 @@ void Process_data(Vector<WindlogType>& windlog, int month_input, int year_input,
 	}
 	//after search endded
 	if (found == false) {//year not found - print "(month) year no data"
-		if (month_input != 0) { cout << month_to_int(month_count) << " " << year_input << ":02 No Data" << endl; }
-		else { cout << "Year: " << year_input << ":03 No Data" << endl; }
+		if (month_input != 0) { cout << month_to_int(month_count) << " " << year_input << ": No Data" << endl; }
+		else { cout << "Year: " << year_input << ": No Data" << endl; }
 	}
 	else {//if year found and output previous month done
 		if (month_input == 0) {//if option require output for every month of a year --> apply for option 2,3,4
@@ -222,7 +241,7 @@ void Process_data(Vector<WindlogType>& windlog, int month_input, int year_input,
 				month_count++;
 			}
 			while (month_count <= 12) {//repeat print " no data" for all month that dont have data 
-				cout << month_to_int(month_count) << " " << year_input << ":2 No Data" << endl;
+				cout << month_to_int(month_count) << " " << year_input << ": No Data" << endl;
 				month_count++;
 			}
 		}
@@ -305,37 +324,45 @@ void ReadFile(Vector<WindlogType>& windlog) {
 		//data/MetData_Mar01-2015-Mar01-2016-ALL.csv
 		//
 		input.ignore(500, '\n'); //skip 1st line, till end of line
-
+		int count_line = 1;// for debug line
 		while (!input.eof()) {
+			count_line++; cout << count_line << endl;
 			string singleLine;
 			WindlogType StructWind;
 			getline(input, singleLine, '\n');
 			//cout <<":"<< singleLine << endl;// output till end of line
 
 			//value checking for what is in the input_file (GIGO)
-			if (singleLine == " " || singleLine == "") {
-				//cout << "there is an empty line in file" << endl;
+			if (singleLine == "" || singleLine == " " ) {
 				break;
 			}
-			SplitString(singleLine, StructWind);
-
-			//// **/**/**** **:**,DP,Dta,Dts,EV,QFE,QFF,QNH,RF,RH,S,SR,ST1,ST2,ST3,ST4,Sx,T
-			////				  0 ,1  ,2  ,3 ,4  ,5  ,6  ,7 ,8 ,9,10,11 ,12 ,13 ,14 ,15,16,\n
-			for (int i = 0; i <= 17; i++) {
-				if (i == 10) {
-					StructWind.speed = stof(singleLine.substr(0, singleLine.find(",")));//read till delimiter in singleLine as float
-				}
-				else if (i == 11) {
-					StructWind.solar_radiation = stof(singleLine.substr(0, singleLine.find(",")));//read till delimiter in singleLine as float
-				}
-				else if (i == 17) {
-					StructWind.air_temperature = stof(singleLine.substr(0, singleLine.find(",")));//read till delimiter in singleLine as float
-				}
-				singleLine = singleLine.substr(singleLine.find(",") + 1, singleLine.size());
+			if (search_string(singleLine, "N/A") == true) {
+				
 			}
+			else{
+					//add to data structure
+					SplitString(singleLine, StructWind);
 
-			//add into windlog Vector
-			windlog.push_back(StructWind);
+					//// **/**/**** **:**,DP,Dta,Dts,EV,QFE,QFF,QNH,RF,RH,S,SR,ST1,ST2,ST3,ST4,Sx,T
+					////				  0 ,1  ,2  ,3 ,4  ,5  ,6  ,7 ,8 ,9,10,11 ,12 ,13 ,14 ,15,16,\n
+					for (int i = 0; i <= 17; i++) {
+					if (i == 10) {
+						StructWind.speed = stof(singleLine.substr(0, singleLine.find(",")));//read till delimiter in singleLine as float
+					}
+					else if (i == 11) {
+						StructWind.solar_radiation = stof(singleLine.substr(0, singleLine.find(",")));//read till delimiter in singleLine as float
+					}
+					else if (i == 17) {
+						StructWind.air_temperature = stof(singleLine.substr(0, singleLine.find(",")));//read till delimiter in singleLine as float
+					}
+					singleLine = singleLine.substr(singleLine.find(",") + 1, singleLine.size());
+					}
+
+					//add into windlog Vector
+					windlog.push_back(StructWind);
+				}
+				
+	
 
 			//test check
 			//cout << " ssay " << sDay;

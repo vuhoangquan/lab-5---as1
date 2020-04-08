@@ -141,11 +141,14 @@
   <ItemGroup>
     <ClCompile Include="date.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="testBST.cpp" />
+    <ClCompile Include="testUnit.cpp" />
     <ClCompile Include="time.cpp" />
     <ClCompile Include="unit.cpp" />
     <ClCompile Include="unit_testing_file.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BST.h" />
     <ClInclude Include="date.h" />
     <ClInclude Include="time.h" />
     <ClInclude Include="unit.h" />
@@ -153,8 +156,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="algorithm_explanation.docx" />
-    <None Include="data\MetData-31-3.csv" />
-    <None Include="data\MetData_Mar01-2014-Mar01-2015-ALL.csv" />
     <None Include="evaluation.docx" />
     <None Include="UML\lab5.mdj" />
     <None Include="WindTempSolar.csv" />

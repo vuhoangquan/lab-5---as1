@@ -14,12 +14,14 @@ using namespace std;
  *
  */
 class time {
-	/**
-	 * @brief overload input and output to show, store all time info
-	 */
-	 //friend ostream& operator << (ostream&, const time&);//declaration (of vector?)
-	 //friend istream& operator >> (istream&, time&);
+	
+	 friend ostream& operator << (ostream&, const time&);
+	 friend istream& operator >> (istream&, time&);
 public:
+	bool operator < (time& rhs)const;
+	bool operator == (time& rhs)const;
+	time& operator = (const int rhs);
+
 	/**
 	 * @brief set default value for hour and minute
 	 */

@@ -30,6 +30,12 @@
     <ClCompile Include="unit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="testBST.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="testUnit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="date.h">
@@ -44,14 +50,11 @@
     <ClInclude Include="Vector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BST.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="data\MetData-31-3.csv">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="data\MetData_Mar01-2014-Mar01-2015-ALL.csv">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="UML\lab5.mdj">
       <Filter>Resource Files</Filter>
     </None>

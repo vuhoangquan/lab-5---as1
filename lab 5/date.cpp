@@ -53,14 +53,53 @@ int date::getYear() const {
 	return Year;
 }
 
-//
-//ostream& operator <<(ostream& osObject, const date& date1)
-//{
-//	osObject << date1.Date << "/" << date1.Month << "/" << date1.Year;
-//	return osObject;
-//}
-//istream& operator >>(istream& isObject, date& date1)
-//{
-//	isObject >> date1.Date >> date1.Month >> date1.Year;
-//	return isObject;
-//}
+//io operator overloading
+ostream& operator <<(ostream& osObject, const date& date1)
+{
+	osObject << date1.Date << "/" << date1.Month << "/" << date1.Year;
+	return osObject;
+}
+istream& operator >>(istream& isObject, date& date1)
+{
+	isObject >> date1.Date >> date1.Month >> date1.Year;
+	return isObject;
+}
+
+//comparison operator overloading
+
+bool date::operator < (date& rhs)const {
+	if (this->getYear() < rhs.getYear()) {
+		return true;
+	}
+	else if (this->getMonth() < rhs.getMonth()) {
+		return true;
+	}
+	else if (this->getDay() < rhs.getDay()) {
+			return true;
+	}
+	else { return false; }
+}
+
+
+bool date::operator == (date& rhs)const {
+	if (this->getYear() == rhs.getYear()) {
+		return true;
+	}
+	else if (this->getMonth() == rhs.getMonth()) {
+		return true;
+	}
+	else if (this->getDay() == rhs.getDay()) {
+		return true;
+	}
+	else { return false; }
+}
+
+date& date::operator = (const int rhs) // copy assignment
+{
+	if (rhs == 0) {
+		this->setDay(00);
+		this->setMonth(00);
+		this->setYear(0000);
+	}
+	return *this;
+}

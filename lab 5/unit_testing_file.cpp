@@ -189,3 +189,20 @@ int unit_testing_Unit_class() {
 
 	return 0;
 }
+
+int test_string_find() {
+	//test string find
+	string str("There are two needles in this haystack with needles.");
+	string str2("too");
+	size_t found = str.find(str2);
+	if (found != std::string::npos)
+	{
+		std::cout << "first " + str2 + " is found at: " << found << '\n';
+	}
+	else {
+		cout << "searched " + str2 + " not found" << endl;
+	}
+
+	system("pause");
+	return 0;
+}
