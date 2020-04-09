@@ -54,14 +54,52 @@ float unit::getAirTemp() const {
 	return air_temperature;
 }
 
-//
-//ostream& operator <<(ostream& osObject, const date& date1)
-//{
-//	osObject << date1.Date << "/" << date1.Month << "/" << date1.Year;
-//	return osObject;
-//}
-//istream& operator >>(istream& isObject, date& date1)
-//{
-//	isObject >> date1.Date >> date1.Month >> date1.Year;
-//	return isObject;
-//}
+//io operator overloading
+ostream& operator <<(ostream& osObject, const unit& unit1)
+{
+	osObject << unit1.speed << "/" << unit1.solar_radiation << "/" << unit1.air_temperature;
+	return osObject;
+}
+istream& operator >>(istream& isObject, unit& unit1)
+{
+	isObject >> unit1.speed >> unit1.solar_radiation >> unit1.air_temperature;
+	return isObject;
+}
+
+//comparison operator overloading 
+bool unit::operator < (unit& rhs)const {
+	if (this->getSpeed() < rhs.getSpeed()) {
+		return true;
+	}
+	else if (this->getSolarRad() < rhs.getSolarRad()) {
+		return true;
+	}
+	else if (this->getAirTemp() < rhs.getAirTemp()) {
+		return true;
+	}
+	else { return false; }
+}
+
+
+bool unit::operator == (unit& rhs)const {
+	if (this->getSpeed() == rhs.getSpeed()) {
+		return true;
+	}
+	else if (this->getSolarRad() == rhs.getSolarRad()) {
+		return true;
+	}
+	else if (this->getAirTemp() == rhs.getAirTemp()) {
+		return true;
+	}
+	else { return false; }
+}
+
+unit& unit::operator = (const int rhs) // copy assignment
+{
+	if (rhs == 0) {
+		this->setSpeed(0.0);
+		this->setSolarRad(0.0);
+		this->setAirTemp(0.0);
+	}
+	return *this;
+}

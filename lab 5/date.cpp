@@ -56,7 +56,7 @@ int date::getYear() const {
 //io operator overloading
 ostream& operator <<(ostream& osObject, const date& date1)
 {
-	osObject << date1.Date << "/" << date1.Month << "/" << date1.Year;
+	osObject << date1.Date << "/" << date1.Month << "/" << date1.Year << "  ";
 	return osObject;
 }
 istream& operator >>(istream& isObject, date& date1)
@@ -71,25 +71,34 @@ bool date::operator < (date& rhs)const {
 	if (this->getYear() < rhs.getYear()) {
 		return true;
 	}
-	else if (this->getMonth() < rhs.getMonth()) {
-		return true;
-	}
-	else if (this->getDay() < rhs.getDay()) {
+	else if (this->getYear() == rhs.getYear()) {
+		if (this->getMonth() < rhs.getMonth()) {
 			return true;
+		}
+		else if (this->getMonth() == rhs.getMonth()) {
+			if (this->getDay() < rhs.getDay()) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else { return false; }
 	}
-	else { return false; }
+	else {
+		return false;
+	}
 }
-
 
 bool date::operator == (date& rhs)const {
 	if (this->getYear() == rhs.getYear()) {
-		return true;
-	}
-	else if (this->getMonth() == rhs.getMonth()) {
-		return true;
-	}
-	else if (this->getDay() == rhs.getDay()) {
-		return true;
+		if (this->getMonth() == rhs.getMonth()) {
+			if (this->getDay() == rhs.getDay()){
+				return true;
+			}
+			else { return false; }
+		}
+		else { return false; }
 	}
 	else { return false; }
 }

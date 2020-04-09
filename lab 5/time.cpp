@@ -32,7 +32,10 @@ bool time::operator < (time& rhs)const {
 
 bool time::operator == (time& rhs)const {
 	if (this->getHour() == rhs.getHour()) {
-		return true;
+		if (this->getMin() == rhs.getMin()) {
+			return true;
+		}
+		else { return false; }
 	}
 	else { return false; }
 }
@@ -87,15 +90,3 @@ int time::getHour() const {
 int time::getMin() const {
 	return Min;
 }
-//
-//
-//ostream& operator <<(ostream& osObject, const time& time1)
-//{
-//	osObject << time1.Hour << ":" << time1.Min;
-//	return osObject;
-//}
-//istream& operator >>(istream& isObject, time& time1)
-//{
-//	isObject >> time1.Hour >> time1.Min;
-//	return isObject;
-//}

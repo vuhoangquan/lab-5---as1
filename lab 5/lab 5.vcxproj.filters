@@ -36,6 +36,12 @@
     <ClCompile Include="testUnit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="testMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="testAVL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="date.h">
@@ -53,6 +59,9 @@
     <ClInclude Include="BST.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AVL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="UML\lab5.mdj">
@@ -62,9 +71,6 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="algorithm_explanation.docx">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="WindTempSolar.csv">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

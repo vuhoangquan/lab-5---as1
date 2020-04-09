@@ -141,13 +141,16 @@
   <ItemGroup>
     <ClCompile Include="date.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="testAVL.cpp" />
     <ClCompile Include="testBST.cpp" />
+    <ClCompile Include="testMap.cpp" />
     <ClCompile Include="testUnit.cpp" />
     <ClCompile Include="time.cpp" />
     <ClCompile Include="unit.cpp" />
     <ClCompile Include="unit_testing_file.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AVL.h" />
     <ClInclude Include="BST.h" />
     <ClInclude Include="date.h" />
     <ClInclude Include="time.h" />
@@ -158,7 +161,6 @@
     <None Include="algorithm_explanation.docx" />
     <None Include="evaluation.docx" />
     <None Include="UML\lab5.mdj" />
-    <None Include="WindTempSolar.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -18,9 +18,12 @@ class unit {
 	/**
 	 * @brief overload input and output to show, store all sensor data info
 	 */
-	 //friend ostream& operator << (ostream&, const time&);//declaration (of vector?)
-	 //friend istream& operator >> (istream&, time&);
+	 friend ostream& operator << (ostream&, const unit&);
+	 friend istream& operator >> (istream&, unit&);
 public:
+	bool operator < (unit& rhs)const;
+	bool operator == (unit& rhs)const;
+	unit& operator = (const int rhs);
 	/**
 	 * @brief set default value for all sensor data
 	 */

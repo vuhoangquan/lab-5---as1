@@ -24,6 +24,9 @@ public:
 	bool operator < (date& rhs)const;
 	bool operator == (date& rhs)const;
 	date& operator = (const int rhs);
+	/**
+	 * @brief set default value for all date data
+	 */
 	date();
 	/**
 	 * @brief  set date month year

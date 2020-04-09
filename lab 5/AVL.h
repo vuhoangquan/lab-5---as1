@@ -1,5 +1,6 @@
-#ifndef H_BST
-#define H_BST
+
+#ifndef H_AVL
+#define H_AVL
 #include<iostream>
 
 using namespace std;
@@ -9,6 +10,7 @@ struct nodeType {
 	elemType info;
 	nodeType<elemType>* lLink;
 	nodeType<elemType>* rLink;
+	int height=0;
 };
 
 template <class elemType>
@@ -25,6 +27,7 @@ public:
 	void preorderTraversal()const;
 	void postorderTraversal()const;
 	void destroy(nodeType<elemType>*& p);
+	int GetHeight(nodeType<elemType>*& p);
 	nodeType<elemType> getRoot()const;
 
 private:
@@ -148,13 +151,13 @@ void BST<elemType>::preorder(nodeType<elemType>* p)const {
 	if (p != NULL) {
 		cout << p->info << " ";
 		preorder(p->lLink);
-		preorder(p->rLink);
+		inorder(p->rLink);
 	}
 }
 template <class elemType>
 void BST<elemType>::inorder(nodeType<elemType>* p)const {
 	if (p != NULL) {
-		inorder(p->lLink);
+		preorder(p->lLink);
 		cout << p->info << " ";
 		inorder(p->rLink);
 	}
@@ -162,8 +165,8 @@ void BST<elemType>::inorder(nodeType<elemType>* p)const {
 template <class elemType>
 void BST<elemType>::postorder(nodeType<elemType>* p)const {
 	if (p != NULL) {
-		postorder(p->lLink);
-		postorder(p->rLink);
+		preorder(p->lLink);
+		inorder(p->rLink);
 		cout << p->info << " ";
 	}
 }
@@ -179,7 +182,11 @@ void BST<elemType>::destroy(nodeType<elemType>*& p) {
 	}
 }
 template <class elemType>
+int BST<elemType>::GetHeight(nodeType<elemType>*& p) {
+	return ((p == NULL) ? 0 : p.height); 
+}
+template <class elemType>
 nodeType<elemType> BST<elemType>::getRoot() const {
 	return *root;
 }
-#endif //BST_H
+#endif //AVL_H
