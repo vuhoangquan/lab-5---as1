@@ -44,13 +44,6 @@ inline bool operator == (const dateTimeType& lhs, const dateTimeType& rhs) {
 	else { false; }
 }
 
-//inline bool operator < (const dateTimeType2& lhs, const dateTimeType2& rhs) {
-//	return (lhs.d < rhs.d && lhs.t < rhs.t);
-//}
-//
-//inline bool operator == (const dateTimeType2& lhs, const dateTimeType2& rhs) {
-//	return (lhs.d == rhs.d && lhs.t == rhs.t);
-//}
 using namespace std;
 
 int testMap() {
@@ -121,7 +114,7 @@ int testMap() {
 	Struct_1.t = timePtr1;
 	map2[Struct_1] = 1244;
 
-	//map2.insert(pair<dateTimeType, int>(Struct_1, 2135));
+	map2.insert(pair<dateTimeType, int>(Struct_1, 2135));
 
 	dateTimeType Struct_2;
 	date* datePtr2 = new date(6, 0, 1582);

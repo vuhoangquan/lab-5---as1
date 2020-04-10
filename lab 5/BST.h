@@ -26,7 +26,7 @@ public:
 	void postorderTraversal()const;
 	void destroy(nodeType<elemType>*& p);
 	nodeType<elemType> getRoot()const;
-
+	nodeType<elemType> getInfo(const elemType& searchItem);
 private:
 	void inorder(nodeType<elemType>* p)const;
 	void preorder(nodeType<elemType>* p)const;
@@ -182,4 +182,28 @@ template <class elemType>
 nodeType<elemType> BST<elemType>::getRoot() const {
 	return *root;
 }
+
+template <class elemType>
+nodeType<elemType> BST<elemType>::getInfo(const elemType& searchItem) {
+	nodeType<elemType> current = new nodeType<elemType>;
+	bool found = false;
+
+	if (root == NULL) {
+		cout << "cannot search empty tree" << endl;
+	}
+	else {
+		current = root;
+
+		while (current != NULL && !found) {
+			if (searchItem == current->info)
+				found = true;
+			else if (searchItem < current->info)
+				current = current->lLink;
+			else
+				current = current->rLink;
+		}
+	}
+	return current;//ptr created inside function //return curr->info?
+}
+
 #endif //BST_H

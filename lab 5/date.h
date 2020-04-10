@@ -83,6 +83,8 @@ public:
 	 */
 	int getYear() const;
 
+	int getDateAsInt();
+
 private:
 	///date of recorded data
 	int Date;//data members

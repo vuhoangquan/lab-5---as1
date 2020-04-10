@@ -52,6 +52,9 @@ int date::getMonth() const {
 int date::getYear() const {
 	return Year;
 }
+int date::getDateAsInt() {
+	return Date + (Month * 10000) + (Year * 1000000);
+}
 
 //io operator overloading
 ostream& operator <<(ostream& osObject, const date& date1)

@@ -9,13 +9,52 @@
 #include "date.h"
 
 using namespace std;
+//
+//inline bool operator < (const date& lhs, const date& rhs) {
+//	if (lhs.getYear() < rhs.getYear()) {
+//		return true;
+//	}
+//	else if (lhs.getYear() == rhs.getYear()) {
+//		if (lhs.getMonth() < rhs.getMonth()) {
+//			return true;
+//		}
+//		else if (lhs.getMonth() == rhs.getMonth()) {
+//			if (lhs.getDay() < rhs.getDay()) {
+//				return true;
+//			}
+//			else {
+//				return false;
+//			}
+//		}
+//		else { return false; }
+//	}
+//	else {
+//		return false;
+//	}
+//}
+//
+//inline bool operator == (const date& lhs, const date& rhs) {
+//	if (lhs.getYear() == rhs.getYear()) {
+//		if (lhs.getMonth() == rhs.getMonth()) {
+//			if (lhs.getDay() == rhs.getDay()) {
+//				return true;
+//			}
+//			else { return false; }
+//		}
+//		else { return false; }
+//	}
+//	else { return false; }
+//}
+
+
 
 int testBSTClass() {
 	BST<int> IntTree;
 	BST<time> TimeTree;
 	BST<date> DateTree;
 
-	time timeobj;
+	date dateobj(12,10,1993);
+	cout << dateobj.getDateAsInt() << endl;
 
 	IntTree.insert(122);
 	IntTree.insert(123);
@@ -35,6 +74,7 @@ int testBSTClass() {
 
 	//timeobj.setTime(13, 53);
 	//TimeTree.insert(timeobj);
+
 	TimeTree.insert(time(13, 53));
 	TimeTree.insert(time(12, 53));
 	TimeTree.insert(time(3, 3));
@@ -68,10 +108,29 @@ int testBSTClass() {
 	DateTree.insert(date(12, 553, 2003));
 	DateTree.insert(date(1, 10, 2003));
 	DateTree.inorderTraversal(); cout << endl;
+	cout << "search: " << DateTree.search(date(1, 10, 2003)) << endl;
+
 	DateTree.preorderTraversal(); cout << endl;
 	DateTree.deleteNode(date(12, 10, 2003));
 	DateTree.deleteNode(date(1, 10, 2003));// this wont run because root has been deleted
 	DateTree.inorderTraversal(); cout << endl;
 
+	cout << "\n ///complex map  with BST as key \n" << endl;//integrate BST and MAP
+	cout << "\n ..can not compile.. \n" << endl;
+	//map<date, int> MapBST;
+	//MapBST[DateTree.getInfo(date(12, 10, 2003))] = 2123;
+	//MapBST[DateTree.getInfo(date(13, 6, 2003))] = 10;
+	//MapBST[DateTree.getInfo(date(12, 10, 2001))] = 2123;
+	//MapBST[DateTree.getInfo(date(6, 20, 1953))] = 201535;
+	//MapBST[DateTree.getInfo(date(12, 553, 2003))] = 245;
+
+	//map<date, int>::iterator itr222;
+	//for (itr222 = MapBST.begin(); itr222 != MapBST.end(); ++itr222)
+	//{
+	//	itr222->first.getYear();cout << "  ";
+	//	itr222->first.getMonth();
+	//	cout << endl;
+	//	cout << itr222->second << " " << "\n";
+	//}
 	return 0;
 }
