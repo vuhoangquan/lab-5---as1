@@ -53,7 +53,7 @@ int date::getYear() const {
 	return Year;
 }
 int date::getDateAsInt() {
-	return Date + (Month * 10000) + (Year * 1000000);
+	return Date + (Month * 100) + (Year * 10000);
 }
 
 //io operator overloading

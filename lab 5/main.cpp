@@ -11,6 +11,7 @@
 #include <map>
 const int pi = 314;
 //-------------------------------------------------------------------------
+///Struct that store date, time, sensor data named as Unit
 typedef struct {
 	date* d;
 	time* t;
@@ -34,12 +35,15 @@ static void ReadMetIndex(Vector<string>& FileVector);
 bool SearchString(string singleline, string searchWord);
 void IndexMonthYear(Vector<WindlogType>& windlog, BST<date>& SearchTree, map<int, int>& IndexMap);
 bool checkNA(string line);
+int searchBSTTime(int year_input, int month_input, BST<date>& SearchTree, map<int, int>& IndexMap);
 
 
+int testUnitClass();
 int testMap();
 int testBSTClass();
 int testUnitClass();
 //-------------------------------------------------------------------------
+
 int main() {
 	//testMap();
 	//testBSTClass();
@@ -63,6 +67,10 @@ int main() {
 		cout << itrr->first << " " << itrr->second << "\n";
 	}
 	cout << endl;
+	//test searchBSTTime and map get Vector data
+	int testINtSPecial = 0;
+	testINtSPecial = searchBSTTime(2, 2012, SearchTree, IndexMap);
+	cout << testINtSPecial << endl;
 
 	DisplayMenu();
 	Menu(windlog);
@@ -71,6 +79,7 @@ int main() {
 	return 0;
 }
 //-------------------------------------------------------------------------
+///insert data from vector into BST and STL map
 void IndexMonthYear(Vector<WindlogType>& windlog, BST<date>& SearchTree, map<int, int>& IndexMap) {
 	bool year_changed = false, month_changed = false;
 	int var_year = 0, var_month = 0;
@@ -103,6 +112,7 @@ static void DisplayMenu() {
 	cout << "---------------\nMENU: \n 1. show data from a month of a year \n 2. show data from a year \n 3. show data from a year \n 4. export data from a year to WindTempSolar.csv file \n 5. exit program \n---------------\n";
 };
 //-------------------------------------------------------------------------
+///read txt file and get all datafile name store in a Vector
 static void ReadMetIndex(Vector<string>& FileVector) {
 	ifstream input;
 	int j = 0;
@@ -190,6 +200,7 @@ void Print_partData(Vector<WindlogType>& windlog) {
 	}
 }
 //-------------------------------------------------------------------------
+///input string and a search Key Word, if keyword is found return true
 bool SearchString(string singleline, string searchWord) {
 	size_t found = singleline.find(searchWord);
 	if (found != std::string::npos)
@@ -205,6 +216,18 @@ bool SearchString(string singleline, string searchWord) {
 	}
 }
 //-------------------------------------------------------------------------
+///search BST if its found then ref to map and get at(location) from there to return 
+int searchBSTTime(int month_input, int year_input, BST<date>& SearchTree, map<int, int>& IndexMap) {
+	
+	date dateobj(1, month_input, year_input);
+	if (SearchTree.search(dateobj) == true) {
+		return (IndexMap.find(dateobj.getDateAsInt())->second);
+	}
+	else { 
+		return 0;
+	}
+}
+//-------------------------------------------------------------------------
 void Process_data(Vector<WindlogType>& windlog, int month_input, int year_input, int s, int sr, int t, bool file_output) {
 	bool found = false;//indicate if search has any matching row
 	int month_count = 1;//check from month 1 to 12
@@ -217,6 +240,7 @@ void Process_data(Vector<WindlogType>& windlog, int month_input, int year_input,
 	//always output once
 	cout << year_input << ":" << endl;
 	output_file << year_input << ",\n";
+	//search BST
 
 	for (int i = 0; i < windlog.Size(); i++)//search whole dataset
 	{
