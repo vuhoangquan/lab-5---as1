@@ -9,7 +9,6 @@
 #include "Vector.h"//capital V to distinguish from STL vector
 #include "BST.h"
 #include <map>
-const int pi = 314;
 //-------------------------------------------------------------------------
 ///Struct that store date, time, sensor data named as Unit
 typedef struct {
@@ -25,9 +24,9 @@ string month_to_int(int monthParam);
 float Wh_to_kWh(float watt_per_min);
 float Kmh_to_Ms(float speed_kmh);
 void Print_partData(Vector<WindlogType>& windlog);
-void Process_data(Vector<WindlogType>& windlog, int month_input, int year_input, int s, int sr, int t, bool file_output);
+void Process_data(Vector<WindlogType>& windlog, BST<date>& SearchTree, map<int, int>& IndexMap, int month_input, int year_input, int s, int sr, int t, bool file_output);
 void ShowDataOfAMthOfYear(Vector<WindlogType>& windlog);
-void Menu(Vector<WindlogType>& windlog);
+void Menu(Vector<WindlogType>& windlog, BST<date>& SearchTree, map<int, int>& IndexMap);
 void ReadFile(Vector<WindlogType>& windlog);
 void SplitString(string singleLine, WindlogType& StructWind);
 static void DisplayMenu();
@@ -35,7 +34,7 @@ static void ReadMetIndex(Vector<string>& FileVector);
 bool SearchString(string singleline, string searchWord);
 void IndexMonthYear(Vector<WindlogType>& windlog, BST<date>& SearchTree, map<int, int>& IndexMap);
 bool checkNA(string line);
-int searchBSTTime(int year_input, int month_input, BST<date>& SearchTree, map<int, int>& IndexMap);
+int searchBSTTime(int year_input, BST<date>& SearchTree, map<int, int>& IndexMap);
 
 
 int testUnitClass();
@@ -57,23 +56,23 @@ int main() {
 	ReadFile(windlog);
 	IndexMonthYear(windlog, SearchTree, IndexMap);
 
-	//test BST and STL map integration
-	cout << endl;
-	SearchTree.inorderTraversal();
+	////test BST and STL map integration
+	//cout << endl;
+	//SearchTree.inorderTraversal();
 	cout << endl;
 	map<int, int>::iterator itrr;
 	for (itrr = IndexMap.begin(); itrr != IndexMap.end(); ++itrr)
 	{
 		cout << itrr->first << " " << itrr->second << "\n";
 	}
-	cout << endl;
-	//test searchBSTTime and map get Vector data
-	int testINtSPecial = 0;
-	testINtSPecial = searchBSTTime(2, 2012, SearchTree, IndexMap);
-	cout << testINtSPecial << endl;
+	//cout << endl;
+	////test searchBSTTime and map get Vector data
+	//int testINtSPecial = 0;
+	//testINtSPecial = searchBSTTime(2012, SearchTree, IndexMap);
+	//cout << testINtSPecial << endl;
 
 	DisplayMenu();
-	Menu(windlog);
+	Menu(windlog, SearchTree, IndexMap);
 
 	system("pause");
 	return 0;
@@ -217,18 +216,28 @@ bool SearchString(string singleline, string searchWord) {
 }
 //-------------------------------------------------------------------------
 ///search BST if its found then ref to map and get at(location) from there to return 
-int searchBSTTime(int month_input, int year_input, BST<date>& SearchTree, map<int, int>& IndexMap) {
-	
-	date dateobj(1, month_input, year_input);
+int searchBSTTime(int year_input, BST<date>& SearchTree, map<int, int>& IndexMap) {
+
+	date dateobj(1, 1, year_input);
 	if (SearchTree.search(dateobj) == true) {
 		return (IndexMap.find(dateobj.getDateAsInt())->second);
 	}
-	else { 
+	else { //search BST == false
+		//search next month
+		for (int j = 0; j < 50; j++) {
+			dateobj.setYear(year_input + j);
+			for (int k = 1; k < 12; k++) {
+				dateobj.setMonth(k);
+				if (SearchTree.search(dateobj) == true) {
+					return (IndexMap.find(dateobj.getDateAsInt())->second);
+				}
+			}
+		}
 		return 0;
 	}
 }
 //-------------------------------------------------------------------------
-void Process_data(Vector<WindlogType>& windlog, int month_input, int year_input, int s, int sr, int t, bool file_output) {
+void Process_data(Vector<WindlogType>& windlog, BST<date>& SearchTree, map<int, int>& IndexMap, int month_input, int year_input, int s, int sr, int t, bool file_output) {
 	bool found = false;//indicate if search has any matching row
 	int month_count = 1;//check from month 1 to 12
 	ofstream output_file;//output file stream to .csv
@@ -241,8 +250,11 @@ void Process_data(Vector<WindlogType>& windlog, int month_input, int year_input,
 	cout << year_input << ":" << endl;
 	output_file << year_input << ",\n";
 	//search BST
-
-	for (int i = 0; i < windlog.Size(); i++)//search whole dataset
+	int search_from = 0, search_until = windlog.Size();
+	search_from = searchBSTTime(year_input, SearchTree, IndexMap);
+	search_until = searchBSTTime(year_input + 1, SearchTree, IndexMap);
+	//cout <<"search from:"<< search_from <<". search  until:"<< search_until<<" \n";
+	for (int i = search_from; i < search_until; i++)//search from the 1st rows that match inputted year
 	{
 		if (windlog.at(i).d->getYear() == year_input)//found year
 		{
@@ -267,8 +279,8 @@ void Process_data(Vector<WindlogType>& windlog, int month_input, int year_input,
 					sum_speed = 0; involved_row = 0, sum_solar_radatiation = 0, sum_air_temp = 0;//reset value
 				}
 				else {//no data calculating 
-					if (month_input == 0) {//run when only year is entered
-						cout << month_to_int(month_count) << " " << year_input << ": No Data" << endl;
+					if (month_input != 1) {//run when only year is entered
+						cout << month_to_int(month_count) << " " << year_input << ":1 No Data" << endl;
 						if (file_output == true) {
 							//print no data to file
 							output_file << month_to_int(month_count) << "," << "nodata" << "\n";
@@ -278,10 +290,14 @@ void Process_data(Vector<WindlogType>& windlog, int month_input, int year_input,
 				month_count++;
 			}
 		}
+		else {//if founded year and now the rows's year not match -> calc and output done -> skip all rows of other year
+
+		}
+
 	}
 	//after search endded
 	if (found == false) {//year not found - print "(month) year no data"
-		if (month_input != 0) { cout << month_to_int(month_count) << " " << year_input << ": No Data" << endl; }
+		if (month_input != 0) { cout << month_to_int(month_count) << " " << year_input << ":2 No Data" << endl; }
 		else { cout << "Year: " << year_input << ": No Data" << endl; }
 	}
 	else {//if year found and output previous month done
@@ -301,7 +317,7 @@ void Process_data(Vector<WindlogType>& windlog, int month_input, int year_input,
 				month_count++;
 			}
 			while (month_count <= 12) {//repeat print " no data" for all month that dont have data 
-				cout << month_to_int(month_count) << " " << year_input << ": No Data" << endl;
+				cout << month_to_int(month_count) << " " << year_input << ":3 No Data" << endl;
 				//print no data to file
 				if (file_output == true) { output_file << month_to_int(month_count) << "," << "nodata" << "\n"; }
 				month_count++;
@@ -339,7 +355,7 @@ void ShowDataOfAMthOfYear(Vector<WindlogType>& windlog) {
 	}
 }
 //-------------------------------------------------------------------------
-void Menu(Vector<WindlogType>& windlog) {
+void Menu(Vector<WindlogType>& windlog, BST<date>& SearchTree, map<int, int>& IndexMap) {
 	cout << "Menu Option:";
 	bool repeat = true;
 	while (repeat) {//loop till specific states "break;"
@@ -351,17 +367,20 @@ void Menu(Vector<WindlogType>& windlog) {
 			//Process_data(windlog, 1, 1, 1, 0, 1, false);//use windlog data, take no month input ,take year input, speed, no solar radiation, has tempertature, no file output
 		}
 		else if (input == "2") {
-			Process_data(windlog, 0, 1, 1, 0, 1, false);//use windlog data, take no month input ,take year input, no speed, has solar radiation, no tempertature, no file output
+			Process_data(windlog, SearchTree, IndexMap, 0, 1, 1, 0, 1, false);//use windlog data, take no month input ,take year input, no speed, has solar radiation, no tempertature, no file output
 		}
 		else if (input == "3") {
-			Process_data(windlog, 0, 1, 0, 1, 0, false);//use windlog data, take no month input ,take year input, no speed, has solar radiation, no tempertature, no file output
+			Process_data(windlog, SearchTree, IndexMap, 0, 1, 0, 1, 0, false);//use windlog data, take no month input ,take year input, no speed, has solar radiation, no tempertature, no file output
 		}
 		else if (input == "4") {
-			Process_data(windlog, 0, 1, 1, 1, 1, true);//use windlog data, take no month input ,take year input, has speed, has solar radiation, has tempertature, has file output
+			Process_data(windlog, SearchTree, IndexMap, 0, 1, 1, 1, 1, true);//use windlog data, take no month input ,take year input, has speed, has solar radiation, has tempertature, has file output
 		}
-		else if (input == "5") {
+		else if (input == "6") {
 			cout << "program exit.......  ";
 			repeat = false;
+		}
+		else if (input == "5") {
+
 		}
 		else {
 			cout << "input can only number 1, 2, 3, 4, 5 as specified!";
