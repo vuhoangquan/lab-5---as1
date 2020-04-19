@@ -41,7 +41,7 @@ inline bool operator == (const dateTimeType& lhs, const dateTimeType& rhs) {
 		}
 		else {return false;}
 	}
-	else { false; }
+	else {return false; }
 }
 
 using namespace std;

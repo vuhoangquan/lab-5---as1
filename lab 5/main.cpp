@@ -9,6 +9,7 @@
 #include "Vector.h"//capital V to distinguish from STL vector
 #include "BST.h"
 #include <map>
+#include <vector>
 //-------------------------------------------------------------------------
 ///Struct that store date, time, sensor data named as Unit
 typedef struct {
@@ -35,47 +36,55 @@ bool SearchString(string singleline, string searchWord);
 void IndexMonthYear(Vector<WindlogType>& windlog, BST<date>& SearchTree, map<int, int>& IndexMap);
 bool checkNA(string line);
 int searchBSTTime(int year_input, BST<date>& SearchTree, map<int, int>& IndexMap);
+void FindHighestSrOneDay(Vector<WindlogType>& windlog, BST<date>& SearchTree, map<int, int>& IndexMap);
 
 
 int testUnitClass();
 int testMap();
 int testBSTClass();
 int testUnitClass();
+int testVectorDelete();
+int mergerTest();
+
 //-------------------------------------------------------------------------
 
 int main() {
+	///TEST CLASS
 	//testMap();
 	//testBSTClass();
-	//system("pause");
-	//return 0;
+	//testVectorDelete();
+	mergerTest();
+	system("pause");
+	return 0;
+
 	Vector<WindlogType> windlog;
 	BST<date> SearchTree;
 	map<int, int> IndexMap;
 
-
 	ReadFile(windlog);
 	IndexMonthYear(windlog, SearchTree, IndexMap);
+	DisplayMenu();
+	Menu(windlog, SearchTree, IndexMap);
 
-	////test BST and STL map integration
-	//cout << endl;
-	//SearchTree.inorderTraversal();
-	cout << endl;
-	map<int, int>::iterator itrr;
-	for (itrr = IndexMap.begin(); itrr != IndexMap.end(); ++itrr)
-	{
-		cout << itrr->first << " " << itrr->second << "\n";
-	}
+	////INTEGRATION TEST FOR BST AND STL MAP
+	//cout <<"\n tree inorder traversal:  "<< endl;
+	SearchTree.inorderTraversal();
+	cout<<SearchTree.search(date(1, 3, 2010));
+	//cout <<"\n map key, index value list: "<< endl;
+	//map<int, int>::iterator itrr;
+	//for (itrr = IndexMap.begin(); itrr != IndexMap.end(); ++itrr)
+	//{
+	//	cout << itrr->first << " " << itrr->second << "\n";
+	//}
 	//cout << endl;
 	////test searchBSTTime and map get Vector data
 	//int testINtSPecial = 0;
 	//testINtSPecial = searchBSTTime(2012, SearchTree, IndexMap);
 	//cout << testINtSPecial << endl;
 
-	DisplayMenu();
-	Menu(windlog, SearchTree, IndexMap);
-
 	system("pause");
 	return 0;
+
 }
 //-------------------------------------------------------------------------
 ///insert data from vector into BST and STL map
@@ -124,7 +133,7 @@ static void ReadMetIndex(Vector<string>& FileVector) {
 
 		getline(input, FileArray[j], '\n');//read filename from a met index
 		FileArray[j] = "data/" + FileArray[j];//add data / to filename
-		FileVector.push_back(*FileArrayPtr);//add into array to return
+		FileVector.Push(*FileArrayPtr);//add into array to return
 		FileArrayPtr++;//move pointer to next location
 		j++;
 	}
@@ -355,6 +364,65 @@ void ShowDataOfAMthOfYear(Vector<WindlogType>& windlog) {
 	}
 }
 //-------------------------------------------------------------------------
+//option 6, take 1 day and return times with highest SR 
+void FindHighestSrOneDay(Vector<WindlogType>& windlog, BST<date>& SearchTree, map<int, int>& IndexMap) {
+	bool found = false;
+	int day_input, month_input, year_input, search_from, search_until;
+	cout << "enter date: "; cin >> day_input;
+	cout << "enter month: "; cin >> month_input;
+	cout << "enter year: "; cin >> year_input;
+
+	search_from = searchBSTTime(year_input, SearchTree, IndexMap);
+	search_until = searchBSTTime(year_input + 1, SearchTree, IndexMap);
+
+	float highestSR = windlog.at(search_from).u->getSolarRad();//1st rows of the day set to highest
+	vector<time> HigestSRTime;
+	time TImeObj(windlog.at(search_from).t->getHour(), windlog.at(search_from).t->getMin());
+	HigestSRTime.push_back(TImeObj);
+
+	for (int i = search_from; i < search_until; i++)//search from the 1st rows that match inputted year
+	{
+		if ((windlog.at(i).d->getMonth()) == month_input && (windlog.at(i).d->getYear()) == year_input)//found month, year
+		{
+			//compare highest with the rest
+			if (highestSR == windlog.at(i).u->getSolarRad()) {
+				TImeObj.setTime(windlog.at(i).t->getHour(), windlog.at(i).t->getMin());
+				HigestSRTime.push_back(TImeObj);// add time with the same SR with the highest 
+
+			}
+			else if (highestSR < windlog.at(i).u->getSolarRad()) {
+				highestSR = windlog.at(i).u->getSolarRad();//current rows becomes the highest SR
+				HigestSRTime.~vector();//delete list of time that is not the highest
+				TImeObj.setTime(windlog.at(i).t->getHour(), windlog.at(i).t->getMin());
+				HigestSRTime.push_back(TImeObj);//add time with the highest SR 
+			}
+
+			if (windlog.at(i).d->getDay() == day_input + 1) {//rows reached the next day
+				i = search_until - 1;//skip the rest of the data
+			}
+			found = true;
+		}
+		else {
+			found = false;
+		}
+		
+	}
+	if (found == true) {
+		//output 
+		cout << "\nDate: " << day_input << "/" << month_input << "/" << year_input << endl;
+		cout << "Highest solar radiation for the day: " << highestSR << "W/m2" << endl;
+		cout << "Time: " << endl;
+		for (int m = 0; m < HigestSRTime.size(); m++) {
+			cout << HigestSRTime.at(m).getHour() << ":" << HigestSRTime.at(m).getMin() << endl;
+		}
+	}
+	else {
+		cout << "\nDate: Not Found" << endl;
+	}
+}
+
+//-------------------------------------------------------------------------
+//menu loop 
 void Menu(Vector<WindlogType>& windlog, BST<date>& SearchTree, map<int, int>& IndexMap) {
 	cout << "Menu Option:";
 	bool repeat = true;
@@ -380,6 +448,7 @@ void Menu(Vector<WindlogType>& windlog, BST<date>& SearchTree, map<int, int>& In
 			repeat = false;
 		}
 		else if (input == "5") {
+			FindHighestSrOneDay(windlog, SearchTree, IndexMap);
 
 		}
 		else {
@@ -396,58 +465,26 @@ void ReadFile(Vector<WindlogType>& windlog) {
 	ReadMetIndex(file_list);
 	for (int fileloop = 0; fileloop < file_list.Size(); fileloop++) {
 		input.open(file_list.at(fileloop));
-		//data/MetData-31-3.csv -- sample
-		//data/MetData_Mar01-2015-Mar01-2016-ALL.csv
 
 		input.ignore(500, '\n'); //skip 1st line, till end of line
 		int count_line = 0;// for debug line
-		string TrailSingleLine = "";
 		while (!input.eof()) {
 			count_line++;// cout << count_line << endl;
 			string singleLine;
 			WindlogType StructWind;
 			getline(input, singleLine, '\n');
-
 			//value checking for what is in the input_file (GIGO)
-			if (singleLine == "" || singleLine == " ") {
+			if (singleLine == "" || singleLine == " " ) {
 				break;
 			}
-
 			//add to data structure
 			SplitString(singleLine, StructWind);
 			//add into windlog Vector
-			windlog.push_back(StructWind);
+			windlog.Push(StructWind);
 			//compare with prev rows for mth change and yr change
 
-
-		//test check
-		//cout << " ssay " << sDay;
-		//cout << "    smoth " << sMonth;
-		//cout << "    syear " << sYear;
-		//cout << "    shh " << sHH;
-		//cout << "    smm " << sMM << endl;
-		//cout << " ssay " << t_day;
-		//cout << "    smoth " << t_month;
-		//cout << "    syear " << t_year;
-		//cout << "    shh " << t_hour;
-		//cout << "    smm " << t_min << endl;
-		//cout << "singleline:     " << singleLine << endl;//this should be all the sensor no
-		//cout << "   Struct date: "; StructWind.d.print();
-		//cout << "   Struct time: "; StructWind.t.print();
-		//cout << "   Struct speed:" << StructWind.speed << endl;
-		//windlog.at(0).d.print();
-		//cout<<" "<<windlog.at(0).speed<<" ";
-		//cout<<windlog.Size()<<" ";
-		//cout<<windlog.getMaxLen()<<" ";
 		}
 		input.close();
-		//test check
-		/*cout<<"size "<<windlog.Size()<<" ";
-		windlog.at(windlog.Size() - 1).t.print(); cout<< " ";
-		windlog.pop();
-		cout << "size " << windlog.Size() << " ";
-		windlog.at(windlog.Size() - 1).t.print();*/
-		// Vector <<- struct <<- date, timeObj, speed <<- primitive_input
 	}
 }
 //-------------------------------------------------------------------------
@@ -455,7 +492,7 @@ bool checkNA(string line) {
 	size_t found = line.find("N/A");
 	if (found != std::string::npos)
 	{
-		cout << "first N/A is found at: " << found << '\n';
+		//cout << "first N/A is found at: " << found << '\n';
 		if (found == 0) {
 			return true;
 		}
@@ -478,7 +515,6 @@ void SplitString(string singleLine, WindlogType& StructWind) {
 	singleLine = singleLine.substr(singleLine.find(":") + 1, singleLine.size());
 	sMM = singleLine.substr(0, singleLine.find(","));//this read into min string
 	singleLine = singleLine.substr(singleLine.find(",") + 1, singleLine.size());
-
 	//store date, time var as int
 	int t_day, t_month, t_year, t_hour, t_min;
 	//change date, time string into int
@@ -489,24 +525,33 @@ void SplitString(string singleLine, WindlogType& StructWind) {
 	t_min = stoi(sMM);
 	//read sensor data
 	unit* UnitPtr = new unit();
+	if (singleLine == "N/A,N/A,N/A,N/A,N/A,N/A,N/A,0,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A" || singleLine =="N/A,N/A,N/A,N/A,N/A,N/A,N/A,0,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A ") {
+		UnitPtr->setSpeed(0); UnitPtr->setSolarRad(0); UnitPtr->setAirTemp(0);
+	}
+	else {
+		for (int i = 0; i <= 17; i++) {
+			if (i == 9) {
+				if (checkNA(singleLine) == true) { UnitPtr->setSpeed(0); }
+				UnitPtr->setSpeed(stof(singleLine.substr(0, singleLine.find(","))));
+			}
+			else if (i == 10) {
+				if (checkNA(singleLine) == true) { UnitPtr->setSolarRad(0); }
+				UnitPtr->setSolarRad(stof(singleLine.substr(0, singleLine.find(","))));
+			}
+			else if (i == 17) {
+				if (checkNA(singleLine) == true) { UnitPtr->setAirTemp(0); }
+				UnitPtr->setAirTemp(stof(singleLine.substr(0, singleLine.find(","))));
+			}
+			if (checkNA(singleLine) == true) {
+				i = 18;
+			}
+			singleLine = singleLine.substr(singleLine.find(",") + 1, singleLine.size());
 
+		}
+	}
 	//// **/**/**** **:**,DP,Dta,Dts,EV,QFE,QFF,QNH,RF,RH,S,SR,ST1,ST2,ST3,ST4,Sx,T
 	////				  0 ,1  ,2  ,3 ,4  ,5  ,6  ,7 ,8 ,9,10,11 ,12 ,13 ,14 ,15,16,\n
-	for (int i = 0; i <= 17; i++) {
-		if (i == 9) {
-			if (checkNA(singleLine) == true) { UnitPtr->setSpeed(0); }
-			UnitPtr->setSpeed(stof(singleLine.substr(0, singleLine.find(","))));
-		}
-		else if (i == 10) {
-			if (checkNA(singleLine) == true) { UnitPtr->setSolarRad(0); }
-			UnitPtr->setSolarRad(stof(singleLine.substr(0, singleLine.find(","))));
-		}
-		else if (i == 17) {
-			if (checkNA(singleLine) == true) { UnitPtr->setAirTemp(0); }
-			UnitPtr->setAirTemp(stof(singleLine.substr(0, singleLine.find(","))));
-		}
-		singleLine = singleLine.substr(singleLine.find(",") + 1, singleLine.size());
-	}
+	
 	date* datePtr = new date(t_day, t_month, t_year);
 	time* timePtr = new time(t_hour, t_min);
 	StructWind.d = datePtr;

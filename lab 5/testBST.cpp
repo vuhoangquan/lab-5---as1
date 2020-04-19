@@ -46,8 +46,6 @@ using namespace std;
 //	else { return false; }
 //}
 
-
-
 int testBSTClass() {
 	BST<int> IntTree;
 	BST<time> TimeTree;

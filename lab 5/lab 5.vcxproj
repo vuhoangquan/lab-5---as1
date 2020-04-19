@@ -143,8 +143,11 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="testAVL.cpp" />
     <ClCompile Include="testBST.cpp" />
+    <ClCompile Include="testIntersection.cpp" />
     <ClCompile Include="testMap.cpp" />
+    <ClCompile Include="testMerge.cpp" />
     <ClCompile Include="testUnit.cpp" />
+    <ClCompile Include="testVector.cpp" />
     <ClCompile Include="time.cpp" />
     <ClCompile Include="unit.cpp" />
     <ClCompile Include="unit_testing_file.cpp" />

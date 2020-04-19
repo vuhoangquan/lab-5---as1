@@ -18,17 +18,17 @@ public:
 	// basic
 	int Size() { return len; };
 	int isEmpty() { return len == 0; };
-	void push_back(T item);
+	void Push(T item);
 	// added minimum
 	T& at(int i);
-	//void resize(int newSize);
+	//void Resize(int newSize);
 	//optional
-	void pop();
+	void Pop();
 	//test
 
 	int getMaxLen() { return maxLen; };
 private:
-	void resize(int newSize);
+	void Resize(int newSize);
 	T* list;
 	int len;
 	int maxLen;// store the ma
@@ -58,11 +58,12 @@ Vector<T>::~Vector()
 	{
 		delete[] list;
 		list = nullptr;
+		len = 0;
 	}
 }
 
 template <class T>
-void Vector<T>::resize(int newSize) 
+void Vector<T>::Resize(int newSize) 
 {
 	T* newList = new T[maxLen];
 	T* newListP = newList;
@@ -78,23 +79,23 @@ void Vector<T>::resize(int newSize)
 }
 
 template <class T>
-void Vector<T>::push_back(T item)
+void Vector<T>::Push(T item)
 {
 	if (len >= maxLen / 2)
 	{
 		//resize();
-		Vector::resize(maxLen * 2);
+		Vector::Resize(maxLen * 2);
 	}
 	list[len++] = item;
 }
 
 template<class T>
-void Vector<T>::pop()
+void Vector<T>::Pop()
 {
 	//resize
 	if (len < maxLen /2) 
 	{
-		Vector::resize(maxLen / 2);
+		Vector::Resize(maxLen / 2);
 	}
 	len--;
 }
@@ -110,130 +111,3 @@ T& Vector<T>::at(int i)
 	return list[0];
 }
 #endif
-
-
-//#pragma once
-////-------------------------------------------------------------------------
-//#ifndef H_Vector 
-//#define H_Vector
-////-------------------------------------------------------------------------
-//#include <iostream>
-//#include <string>
-//using namespace std;
-////-------------------------------------------------------------------------
-//template <class Type>
-///**
-// * @class Vector
-// * @brief manages Vector template functions and data in it
-// *
-// * @date 25/06/2019
-// */
-//class Vector {
-//public:
-//	/**
-//	 * @brief set default length and capacity for Vector list
-//	 */
-//	Vector();
-//	/**
-//	 * @brief  free memory that hold Vector list
-//	 */
-//	~Vector();
-//	/**
-//	 * @brief add new instance into Vector list. Also check list capacity to resize it if needed
-//	 * @param memory location of new instance
-//	 * @return void
-//	 */
-//	void push_back(const Type& i);
-//	/**
-//	 * @brief return location of a instance in list
-//	 * @param index number of instance required
-//	 * @return Type&
-//	 */
-//	Type& at(int i);
-//	/**
-//	 * @brief change the size of current list and move data from current list to new list created
-//	 * @param size of new list
-//	 * @return void
-//	 */
-//	void resize(int newSize);
-//	/**
-//	 * @brief return size of list
-//	 * @return int
-//	 */
-//	int size();
-//	/**
-//	 * @brief print all data stored in list
-//	 * @return void
-//	 */
-//	void print();
-//private:
-//	///maximum data can be store in the Vector list
-//	int capacity;
-//	///pointer pointed to location of Vector list
-//	Type* list;
-//	//amount of data Vector list
-//	int length;
-//};
-//
-////implementation
-//template <class Type>
-//void Vector<Type>::push_back(const Type& i)
-//{
-//	if ((capacity / 2) == length)
-//	{
-//		Vector::resize(capacity * 2.0);
-//	}
-//	list[length] = i;
-//	length++;
-//}
-//
-//template <class Type>
-//Type& Vector <Type>::at(int i)//return 1st location in list if parameter value is not found
-//{
-//	if ((i >= 0) && (i < length))
-//	{
-//		return list[i];
-//	}
-//	return list[0];
-//}
-//
-//template <class Type>
-//int Vector<Type>::size()
-//{
-//	return length;
-//}
-//
-//template <class Type>
-//Vector<Type>::Vector() {
-//	length = 0;
-//	capacity = 200;
-//	list = new Type[capacity];
-//}
-//
-//template <class Type>
-//Vector<Type>::~Vector() {
-//	delete[] list;
-//}
-//
-//template <class Type>
-//void Vector<Type>::resize(int newSize) {
-//	Type* newList = new Type[capacity];
-//	Type* newListP = newList;
-//	Type* oldListP = list;
-//	while (oldListP != (list + length)) {//while != last address of list
-//		*(newListP) = *(oldListP);
-//		newListP++;//move to next location/address
-//		oldListP++;
-//	}//this loop swap value until the last location of list
-//	capacity = newSize;
-//	delete[] list;
-//	list = newList;
-//}
-//
-//template <class Type>
-//void Vector<Type>::print() {
-//	for (int i = 0; i < length; i++) {
-//		cout << "list " << list[i] << endl;
-//	}
-//}
-//#endif//Vector_H

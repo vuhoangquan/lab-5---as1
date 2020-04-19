@@ -42,6 +42,15 @@
     <ClCompile Include="testAVL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="testVector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="testMerge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="testIntersection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="date.h">
