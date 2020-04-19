@@ -19,18 +19,19 @@ master is now divided into 2 local repos (not updated to Github):
     windows one will run test on Merge and Intersection implementation from algorithm in the Exam 
 
 STRUCTURE:
-main > readfile  > readMetIndex 
 
-                 > SplitString > checkNA ("Not Available")
+     main > readfile  > readMetIndex 
+
+                      > SplitString > checkNA ("Not Available")
                  
-     > indexMonthYear
-     > displayMenu
-     > Menu  > showDataOfAmonthOfYear
-             > processData > searchBSTtime
-                           > month_to_int
-                           > Wh_to_KWh
+          > indexMonthYear
+          > displayMenu
+          > Menu  > showDataOfAmonthOfYear
+                  > processData > searchBSTtime
+                                > month_to_int
+                                > Wh_to_KWh
 
-     > //testUnit
-     > //testBST
-     > //testMap
-     > //unit_testing_func..
+          > //testUnit
+          > //testBST
+          > //testMap
+          > //unit_testing_func..
