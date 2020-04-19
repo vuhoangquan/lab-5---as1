@@ -11,6 +11,7 @@ the program (not done as of 19 april)
 
 STRUCTURE:
 main > readfile  > readMetIndex 
+
                  > SplitString > checkNA ("Not Available")
                  
      > indexMonthYear
