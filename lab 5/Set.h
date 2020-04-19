@@ -1,58 +1,49 @@
-
-#ifndef VECTOR_H
-#define VECTOR_H
+//this is vector but without repeated value
+#ifndef SET_H
+#define SET_H
 
 #include <iostream>
 
 #define DEFAULT_SIZE 3
 #define MAX_SIZE 100000
 using namespace std;
-// The class declaration must have doxygen comments – put these in
 
 template <class T>
-class Vector{
+class Set {
 public:
-	Vector(int length = DEFAULT_SIZE);
-	~Vector();
-
-	// basic
+	Set(int length = DEFAULT_SIZE);
+	~Set();
 	int Size() { return len; };
 	int isEmpty() { return len == 0; };
-	void Push(T item);
-	// added minimum
+	void Insert(T item);
 	T& at(int i);
-	//void Resize(int newSize);
-	//optional
 	void Pop();
-	//test
-
 	int getMaxLen() { return maxLen; };
+	void intersection(Set<T> ,Set<T>&);
 private:
 	void Resize(int newSize);
 	T* list;
 	int len;
-	int maxLen;// store the ma
-	// void resize();
-	// void resize(int s);
+	int maxLen;
 };
 
 template <class T>
-Vector<T>::Vector(int length)
+Set<T>::Set(int length)
 {
 	if (length <= 0)
 	{
-		cout << "Vector size must be positive" << endl;
+		cout << "Set size must be positive" << endl;
 		maxLen = DEFAULT_SIZE;
 	}
 	else {
 		maxLen = length;
 	}
-	len = 0;// Vector is empty at first
+	len = 0;// Set is empty at first
 	list = new T[maxLen];
 }
 
 template <class T>
-Vector<T>::~Vector()
+Set<T>::~Set()
 {
 	if (list != nullptr)
 	{
@@ -63,7 +54,7 @@ Vector<T>::~Vector()
 }
 
 template <class T>
-void Vector<T>::Resize(int newSize) 
+void Set<T>::Resize(int newSize)
 {
 	T* newList = new T[maxLen];
 	T* newListP = newList;
@@ -79,29 +70,41 @@ void Vector<T>::Resize(int newSize)
 }
 
 template <class T>
-void Vector<T>::Push(T item)
+void Set<T>::Insert(T item)
 {
-	if (len >= maxLen / 2)
-	{
-		//resize();
-		Vector::Resize(maxLen * 2);
+	bool repeat1 = false;
+
+	for (int n = 0; n < len; n++) {
+		if (list[n] == item) {
+			//cout << "repeated insert" << endl; 
+			repeat1 = true;
+		}
 	}
-	list[len++] = item;
+	if (repeat1 == false) {
+		if (len >= maxLen / 2) {
+			Set::Resize(maxLen * 2);
+		}
+		list[len++] = item;
+		//cout << "inserted" << endl;
+	}
+
+	
 }
 
+
 template<class T>
-void Vector<T>::Pop()
+void Set<T>::Pop()
 {
 	//resize
-	if (len < maxLen /2) 
+	if (len < maxLen / 2)
 	{
-		Vector::Resize(maxLen / 2);
+		Set::Resize(maxLen / 2);
 	}
 	len--;
 }
 
 template<class T>
-T& Vector<T>::at(int i)
+T& Set<T>::at(int i)
 {
 	if ((i >= 0) && (i < len))
 	{
@@ -110,4 +113,21 @@ T& Vector<T>::at(int i)
 	//default return 1st element
 	return list[0];
 }
-#endif
+
+template <class T>
+void Set<T>::intersection( Set<T> set2, Set<T>& set3) {
+	int i = 0, j = 0;
+	while (i != len && j != set2.Size()) {
+		if (list[i] == set2.at(j)) {
+			set3.Insert(set2.at(j));
+			i++; j++;
+		}
+		else if (list[i] < set2.at(j)) {
+			i++;
+		}
+		else {
+			j++;
+		}
+	}
+}
+#endif //SET_H

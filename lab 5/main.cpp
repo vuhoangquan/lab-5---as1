@@ -45,6 +45,7 @@ int testBSTClass();
 int testUnitClass();
 int testVectorDelete();
 int mergerTest();
+int IntersectionTest();
 
 //-------------------------------------------------------------------------
 
@@ -53,7 +54,8 @@ int main() {
 	//testMap();
 	//testBSTClass();
 	//testVectorDelete();
-	mergerTest();
+	//mergerTest();
+	IntersectionTest();
 	system("pause");
 	return 0;
 

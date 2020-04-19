@@ -156,6 +156,7 @@
     <ClInclude Include="AVL.h" />
     <ClInclude Include="BST.h" />
     <ClInclude Include="date.h" />
+    <ClInclude Include="Set.h" />
     <ClInclude Include="time.h" />
     <ClInclude Include="unit.h" />
     <ClInclude Include="Vector.h" />
