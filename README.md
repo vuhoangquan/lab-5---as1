@@ -9,6 +9,10 @@ assignment 2 require read from mulitple file in a directories and load in to at 
 STL map and perform calculation and test the performance by running a timer to calculate the duration for certain task of 
 the program (not done as of 19 april)
 
+master is now divided into 2 local repos (not updated to Github): 
+    one on Mac for running duration check for program
+    windows one will run test on Merge and Intersection implementation from algorithm in the Exam 
+
 STRUCTURE:
 main > readfile  > readMetIndex 
 
