@@ -12,12 +12,14 @@ the program (not done as of 19 april)
 STRUCTURE:
 main > readfile  > readMetIndex 
                  > SplitString > checkNA ("Not Available")
+                 
      > indexMonthYear
      > displayMenu
      > Menu  > showDataOfAmonthOfYear
              > processData > searchBSTtime
                            > month_to_int
                            > Wh_to_KWh
+
      > //testUnit
      > //testBST
      > //testMap
