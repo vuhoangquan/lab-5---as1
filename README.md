@@ -10,9 +10,11 @@ the program (performance timing not done as of 19 april).
 STL map is has index value of the main sensor data which is in vector. so that all menu search option will only involve a very small amount of data.
 
 Limitation of the program:
+
     BST is not AVL or red-black
     BST cannot do rotation
     data (date: date, month, year) can be repeated in vector and BST
+    poorly organised code file due to short dev time (4 days -no prev testing on data structure)
     
 
 master is now divided into 2 local repos (not updated to Github): 
