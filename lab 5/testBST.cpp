@@ -50,7 +50,7 @@ using namespace std;
 
 int testBSTClass() {
 	BST<int> IntTree;
-	BST<time> TimeTree;
+	//BST<time> TimeTree;
 	BST<date> DateTree;
 
 	date dateobj(12,10,1993);
@@ -75,23 +75,23 @@ int testBSTClass() {
 	//timeobj.setTime(13, 53);
 	//TimeTree.insert(timeobj);
 
-	TimeTree.insert(time(13, 53));
-	TimeTree.insert(time(12, 53));
-	TimeTree.insert(time(3, 3));
-	TimeTree.insert(time(5, 5));
-	TimeTree.insert(time(26, 59));
-	TimeTree.insert(time(18, 34));
-	TimeTree.insert(time(9, 24));
-	TimeTree.insert(time(7, 55));
-	cout << "search "
-		<< TimeTree.search(time(7, 54)) << endl << "   "
-		<< TimeTree.search(time(7, 54)) << endl;
-	cout << "empty?" << TimeTree.isEmpty() << endl;
-	TimeTree.inorderTraversal();
+	//TimeTree.insert(time(13, 53));
+	//TimeTree.insert(time(12, 53));
+	//TimeTree.insert(time(3, 3));
+	//TimeTree.insert(time(5, 5));
+	//TimeTree.insert(time(26, 59));
+	//TimeTree.insert(time(18, 34));
+	//TimeTree.insert(time(9, 24));
+	//TimeTree.insert(time(7, 55));
+	//cout << "search "
+	//	<< TimeTree.search(time(7, 54)) << endl << "   "
+	//	<< TimeTree.search(time(7, 54)) << endl;
+	//cout << "empty?" << TimeTree.isEmpty() << endl;
+	//TimeTree.inorderTraversal();
 	cout << endl;
-	TimeTree.deleteNode(time(5, 5));
-	TimeTree.deleteNode(time(18, 34));
-	TimeTree.inorderTraversal();
+	//TimeTree.deleteNode(time(5, 5));
+	//TimeTree.deleteNode(time(18, 34));
+	//TimeTree.inorderTraversal();
 	cout << endl;
 	//TimeTree.preorderTraversal();
 	cout << endl;

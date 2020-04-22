@@ -5,12 +5,12 @@
 using namespace std;
 
 //operator overloading
-ostream& operator <<(ostream& osObject, const time& time1)
+ostream& operator <<(ostream& osObject, const class time& time1)
 {
 	osObject << time1.Hour << ":" << time1.Min;
 	return osObject;
 }
-istream& operator >>(istream& isObject, time& time1)
+istream& operator >>(istream& isObject, class time& time1)
 {
 	isObject >> time1.Hour >> time1.Min;
 	return isObject;
@@ -40,7 +40,7 @@ bool time::operator == (time& rhs)const {
 	else { return false; }
 }
 
-time& time::operator = (const int rhs) // copy assignment
+class time& time::operator = (const int rhs) // copy assignment
 {
 	if (rhs == 0) {
 		this->setHour(00);

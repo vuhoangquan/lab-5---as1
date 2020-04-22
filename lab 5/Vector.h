@@ -5,7 +5,7 @@
 #include <iostream>
 
 #define DEFAULT_SIZE 3
-#define MAX_SIZE 100000
+#define MAX_SIZE 1000000
 using namespace std;
 // The class declaration must have doxygen comments – put these in
 

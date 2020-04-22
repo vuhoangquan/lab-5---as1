@@ -8,7 +8,7 @@
 
 typedef struct{
 	date* d;
-	time* t;
+    class time* t;
 
 } dateTimeType;
 
@@ -41,7 +41,7 @@ inline bool operator == (const dateTimeType& lhs, const dateTimeType& rhs) {
 		}
 		else {return false;}
 	}
-	else { false; }
+	else { return false; }
 }
 
 using namespace std;
@@ -76,7 +76,7 @@ int testMap() {
 	map<int, dateTimeType> map02;
 	dateTimeType Struct_01;
 	date* datePtr01 = new date(12, 10, 1998);
-	time* timePtr01 = new time(12, 1);
+    class time* timePtr01 = new class time(12, 1);
 	Struct_01.d = datePtr01;
 	Struct_01.t = timePtr01;
 	map02[1245] = Struct_01;
@@ -84,7 +84,7 @@ int testMap() {
 
 	dateTimeType Struct_02;
 	date* datePtr02 = new date(6, 0, 1582);
-	time* timePtr02 = new time(23, 59);
+    class time* timePtr02 = new class time(23, 59);
 	Struct_02.d = datePtr02;
 	Struct_02.t = timePtr02;
 	map02[5132] = Struct_02;
@@ -92,7 +92,7 @@ int testMap() {
 
 	dateTimeType Struct_03;
 	date* datePtr03 = new date(26, 10, 1500);
-	time* timePtr03 = new time(04, 52);
+    class time* timePtr03 = new class time(04, 52);
 	Struct_03.d = datePtr03;
 	Struct_03.t = timePtr03;
 	map02[5132] = Struct_03;
@@ -109,7 +109,7 @@ int testMap() {
 	map<dateTimeType, int> map2;
 	dateTimeType Struct_1;
 	date* datePtr1 = new date(12, 10, 1998);
-	time* timePtr1 = new time(12, 1);
+    class time* timePtr1 = new class time(12, 1);
 	Struct_1.d = datePtr1;
 	Struct_1.t = timePtr1;
 	map2[Struct_1] = 1244;
@@ -118,28 +118,28 @@ int testMap() {
 
 	dateTimeType Struct_2;
 	date* datePtr2 = new date(6, 0, 1582);
-	time* timePtr2 = new time(23, 59);
+    class time* timePtr2 = new class time(23, 59);
 	Struct_2.d = datePtr2;
 	Struct_2.t = timePtr2;
 	map2[Struct_2] = 158;
 
 	dateTimeType Struct_3;
 	date* datePtr3 = new date(2, 10, 2020);
-	time* timePtr3 = new time(12, 02);
+    class time* timePtr3 = new class time(12, 02);
 	Struct_3.d = datePtr3;
 	Struct_3.t = timePtr3;
 	map2[Struct_3] = 25135;
 
 	dateTimeType Struct_4;
 	date* datePtr4 = new date(2, 10, 2020);
-	time* timePtr4 = new time(02, 61);
+    class time* timePtr4 = new class time(02, 61);
 	Struct_4.d = datePtr4;
 	Struct_4.t = timePtr4;
 	map2[Struct_4] = 25135;
 
 	dateTimeType Struct_5;
 	date* datePtr5 = new date(2, 9, 2020);
-	time* timePtr5 = new time(12, 02);
+    class time* timePtr5 = new class time(12, 02);
 	Struct_5.d = datePtr5;
 	Struct_5.t = timePtr5;
 	map2[Struct_5] = 25135;
