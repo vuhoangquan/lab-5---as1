@@ -1,5 +1,6 @@
 # lab-5---as1
-submitted as ict283-2 assignment1
+(C++ code)
+submitted as ict283-2 assignment1 
 
 this is originally lab 5 ict283 that modified for assignment 1 and then 2.
 basically the assignment require read from a file and load it in a kind of data structure and then run calculation based on the requirements.
