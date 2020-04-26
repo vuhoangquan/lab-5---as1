@@ -1,5 +1,5 @@
 # lab-5---as1
-(C++ code)
+C++ code.
 submitted as ict283-2 assignment1 
 
 this is originally lab 5 ict283 that modified for assignment 1 and then 2.
