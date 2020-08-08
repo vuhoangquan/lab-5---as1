@@ -1,6 +1,13 @@
 # lab-5---as1
 C++ code.
-submitted as ict283-2 assignment1 
+
+This proj read weather sensory data from .csv files; directories of these file are in met_index.txt; read into struct array [date,time,data]
+to perform a list of operation such as average, highest, lowest of a date, month year etc.
+BST and STL map is used to indexed the data so that processing calculation will be much faster. 
+
+
+
+NOTE:submitted as ict283-2 assignment1 
 
 this is originally lab 5 ict283 that modified for assignment 1 and then 2.
 basically the assignment require read from a file and load it in a kind of data structure and then run calculation based on the requirements.
@@ -18,9 +25,9 @@ Limitation of the program:
     poorly organised code file due to short dev time (4 days -no prev testing on data structure)
     
 
-master is now divided into 2 local repos (not updated to Github): 
-    one on Mac for running duration check for program
-    windows one will run test on Merge and Intersection implementation from algorithm in the Exam 
+Version:master is now divided into 2 local repos (not updated to Github): 
+    one on Mac for running duration check for program (dependency compatibility: Mac has built-in time.h that conflict with custom time.h)
+    windows will run test on Merge and Intersection implementation from algorithm in the Exam 
 
 STRUCTURE:
 
